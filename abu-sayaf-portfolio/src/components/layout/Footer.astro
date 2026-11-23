@@ -1,0 +1,61 @@
+---
+import { site } from '../../data/site';
+import Icon from '../ui/Icon.astro';
+import SocialLink from '../ui/SocialLink.astro';
+import CalendlyBooking from '../ui/CalendlyBooking.astro';
+---
+<footer id="contact" class="footer container section-rule">
+  <div class="footer-top">
+    <div class="footer-intro-block">
+      <div class="footer-eyebrow-row">
+        <p class="eyebrow"><span class="eyebrow-mark"></span> Let's talk</p>
+        <span class="footer-exp-chip" title="10 Years of Professional Software Engineering Experience">
+          <Icon name="award" size={14} />
+          <strong>10 Years</strong> Experience
+        </span>
+      </div>
+      <h2>Have a difficult system to build?</h2>
+      <p>Available for high-impact software architecture, secure engineering, and production-focused work.</p>
+
+      <!-- Prominently Highlighted 10 Years Experience Showcase -->
+      <div class="footer-exp-callout" aria-label="10 years of software engineering experience">
+        <div class="footer-exp-figure">
+          <span class="footer-exp-number">10</span>
+          <span class="footer-exp-plus">+</span>
+          <span class="footer-exp-unit">YRS</span>
+        </div>
+        <div class="footer-exp-divider" aria-hidden="true"></div>
+        <div class="footer-exp-body">
+          <div class="footer-exp-headline">
+            <strong>A Decade of Proven Engineering Leadership</strong>
+            <span class="footer-exp-badge">Senior Architect</span>
+          </div>
+          <p class="footer-exp-desc">
+            10 years designing high-scale distributed systems, resilient cloud infrastructure, and security-hardened production software.
+          </p>
+          <div class="footer-exp-tags">
+            <span class="footer-tag"><Icon name="shield-check" size={13} /> Secure by Design</span>
+            <span class="footer-tag"><Icon name="layers" size={13} /> Distributed Systems</span>
+            <span class="footer-tag"><Icon name="trending-up" size={13} /> Production Scale</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-actions">
+      <CalendlyBooking variant="compact" />
+      <a href="/#work" class="back-to-work">Explore my work <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+
+  <CalendlyBooking variant="panel" class="footer-booking" />
+
+  <div class="social-list" aria-label="Professional profiles">
+    <SocialLink label="Email" icon="mail" href={site.links.email}/>
+    <SocialLink label="GitHub" icon="github" href={site.links.github}/>
+    <SocialLink label="LinkedIn" icon="linkedin" href={site.links.linkedin}/>
+    <SocialLink label="Upwork" icon="award" href={site.links.upwork}/>
+    <SocialLink label="YouTube" icon="youtube" href={site.links.youtube}/>
+  </div>
+  <div class="footer-bottom"><span>© {new Date().getFullYear()} Abu Sayaf</span><span>Designed with intention. Built to be fast.</span><a href="#top">Back to top ↑</a></div>
+</footer>

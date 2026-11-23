@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="AI Is Useful When Judgment Stays Human | Abu Sayaf" description="An engineering note on using AI tools for implementation, debugging, tests, and documentation without outsourcing accountability.">
+  <article class="article-page container">
+    <a href="/#notes" class="article-back">← Back to engineering notes</a>
+    <p class="eyebrow" style="margin-top:35px">ENGINEERING NOTE / AI WORKFLOW</p>
+    <h1>AI is useful when judgment stays human</h1>
+    <p class="article-intro">AI changes the speed of implementation. It does not remove the need to understand the system, evaluate trade-offs, and own what reaches production.</p>
+    <h2>Delegate bounded work</h2>
+    <p>Good tasks have clear context, constraints, acceptance criteria, and a way to verify the result. AI tools can help explore codebases, draft implementations, generate tests, and investigate failures.</p>
+    <h2>Review behavior, not only syntax</h2>
+    <p>Evaluate security boundaries, edge cases, data handling, dependency decisions, and how changes fit the architecture. Automated checks and human code review are complementary.</p>
+    <h2>Keep ownership explicit</h2>
+    <p>Protect secrets and sensitive data, follow the organization's AI-use policies, and do not give agents unrestricted production access. The engineer remains responsible for the design and the outcome.</p>
+    <div class="article-panel"><p><strong>Principle:</strong> Let AI accelerate execution. Keep technical judgment, verification, and accountability with the engineer.</p></div>
+  </article>
+</BaseLayout>

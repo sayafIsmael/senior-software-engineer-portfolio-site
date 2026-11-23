@@ -1,0 +1,16 @@
+---
+import Icon from './Icon.astro';
+interface Props { label: string; icon: string; href?: string; class?: string; }
+const { label, icon, href = '', class: className = '' } = Astro.props;
+const isEmail = label.toLowerCase() === 'email';
+const url = href ? (isEmail && !href.startsWith('mailto:') ? `mailto:${href}` : href) : '';
+---
+{url ? (
+  <a class:list={['social-link', className]} href={url} rel={url.startsWith('https://') ? 'me noopener noreferrer' : undefined} target={url.startsWith('https://') ? '_blank' : undefined}>
+    <Icon name={icon} size={18}/><span>{label}</span><Icon name="arrow-up-right" size={13}/>
+  </a>
+) : (
+  <span class:list={['social-link', 'social-link--pending', className]} aria-label={`${label} link not configured`} title={`Add your ${label} link in src/data/site.ts`}>
+    <Icon name={icon} size={18}/><span>{label}</span><span class="pending-dot" aria-hidden="true"></span>
+  </span>
+)}

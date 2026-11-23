@@ -1,0 +1,26 @@
+---
+import Icon from '../ui/Icon.astro';
+import CalendlyBooking from '../ui/CalendlyBooking.astro';
+
+const links = [
+  { href: '/#work', label: 'Work' },
+  { href: '/#architecture', label: 'Architecture' },
+  { href: '/#approach', label: 'Approach' },
+  { href: '/#book', label: 'Book' },
+  { href: '/#contact', label: 'Contact' },
+];
+---
+<header class="site-header container" id="top">
+  <a class="brand" href="/" aria-label="Abu Sayaf, home">Abu Sayaf <span class="brand-slash" aria-hidden="true">/</span></a>
+  <button type="button" class="menu-toggle" aria-controls="main-navigation" aria-expanded="false" aria-label="Open navigation" data-menu-toggle>
+    <span class="menu-toggle__bar"></span><span class="menu-toggle__bar"></span><span class="menu-toggle__bar"></span>
+  </button>
+  <nav id="main-navigation" class="site-nav" aria-label="Primary navigation" data-main-nav>
+    {links.map(({ href, label }) => <a href={href}>{label}</a>)}
+    <CalendlyBooking variant="inline" class="nav-booking" />
+    <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light mode">
+      <Icon name="sun" size={18} class="theme-icon theme-icon--sun" />
+      <Icon name="moon" size={18} class="theme-icon theme-icon--moon" />
+    </button>
+  </nav>
+</header>

@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectDiagram from '../../components/sections/ProjectDiagram.astro';
+---
+<BaseLayout title="Automation & Operational Visibility | Abu Sayaf" description="An engineering design exploration for reliable order-event notifications, acknowledgment workflows, and production observability.">
+  <article class="article-page container">
+    <a href="/#work" class="article-back">← Back to selected systems</a>
+    <p class="eyebrow" style="margin-top:35px">SYSTEM DESIGN EXPLORATION / 02</p>
+    <h1>Automation & operational visibility</h1>
+    <p class="article-intro">A practical approach to turning important business events into reliable, acknowledged, observable work.</p>
+    <div class="article-meta"><span>Event-driven design</span><span>Reliability</span><span>Workflow automation</span><span>Design exploration</span></div>
+    <h2>The problem</h2>
+    <p>When a new order or urgent operational event arrives, notifying someone is only the beginning. The system also needs to know whether the event was delivered, acknowledged, retried, or escalated.</p>
+    <h2>Conceptual flow</h2>
+    <div class="case-diagram"><ProjectDiagram kind="automation" /></div>
+    <h2>Architecture decisions</h2>
+    <ul>
+      <li><strong>Durable events.</strong> Important changes need persistent identifiers and predictable delivery behavior.</li>
+      <li><strong>Idempotency.</strong> Duplicate deliveries must not create duplicate business actions.</li>
+      <li><strong>Acknowledgment state.</strong> An alert being sent is not equivalent to an alert being handled.</li>
+      <li><strong>Retries and escalation.</strong> Use bounded attempts, backoff, and a clear recovery path.</li>
+      <li><strong>Visibility.</strong> Measure missed events, queue age, retry rates, and time to acknowledgment.</li>
+    </ul>
+    <div class="article-panel"><p><strong>Status:</strong> This page is a system-design exploration. It does not claim a deployed implementation, customer results, or production metrics that have not been verified.</p></div>
+    <a href="/#book" class="button button--primary">Book a meeting ↗</a>
+  </article>
+</BaseLayout>

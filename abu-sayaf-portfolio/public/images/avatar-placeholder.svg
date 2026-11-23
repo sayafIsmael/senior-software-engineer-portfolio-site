@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Placeholder illustration of an engineer">
+<defs><clipPath id="c"><circle cx="120" cy="120" r="120"/></clipPath></defs>
+<g clip-path="url(#c)">
+<rect width="240" height="240" fill="#e3ebdd"/>
+<circle cx="120" cy="104" r="88" fill="#dce8d5"/>
+<path d="M19 255c8-48 38-78 101-78s92 30 101 78" fill="#18492e"/>
+<path d="M96 164v28c16 16 33 17 49 0v-28" fill="#efccaa"/>
+<path d="M77 89c0-39 19-62 45-62 34 0 53 23 49 62l-1 32c-3 36-25 61-50 61s-46-25-49-61l-1-29" fill="#f4ddc5"/>
+<path d="M74 97c-6-34 2-66 35-75 28-10 59 0 63 26 12 9 10 40-1 54-4-20-4-28-12-38-20 11-47 8-69-2-6 10-11 20-16 35Z" fill="#26362d"/>
+<path d="M83 105c8-5 18-6 27-1m18 0c11-5 23-4 31 1" fill="none" stroke="#334237" stroke-width="3" stroke-linecap="round"/>
+<g fill="none" stroke="#263c32" stroke-width="4"><rect x="82" y="107" width="34" height="27" rx="10"/><rect x="124" y="107" width="34" height="27" rx="10"/><path d="M116 116h8M73 116h9m76 0h10"/></g>
+<path d="M109 155c6 5 17 5 23 0" stroke="#a97861" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M89 194c13 14 22 23 31 23s24-10 35-24" fill="none" stroke="#4e7258" stroke-width="3"/>
+</g></svg>

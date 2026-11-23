@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Why Good Architecture Reduces Complexity | Abu Sayaf" description="An engineering note on boundaries, trade-offs, operational needs, and choosing the simplest system that fits.">
+  <article class="article-page container">
+    <a href="/#notes" class="article-back">← Back to engineering notes</a>
+    <p class="eyebrow" style="margin-top:35px">ENGINEERING NOTE / ARCHITECTURE</p>
+    <h1>Why good architecture reduces complexity</h1>
+    <p class="article-intro">A well-designed system does not make complexity disappear. It makes that complexity visible, contained, and manageable.</p>
+    <h2>Start with constraints</h2>
+    <p>Before choosing a framework or service boundary, identify what must be true: expected workload, consistency requirements, security boundaries, team size, operational budget, and acceptable failure modes.</p>
+    <h2>Prefer boundaries over buzzwords</h2>
+    <p>A modular monolith may be easier to build and maintain than a network of small services. Separate deployment becomes useful when independent scaling, ownership, or failure isolation justifies its costs.</p>
+    <h2>Make decisions reversible</h2>
+    <p>Document trade-offs, keep interfaces explicit, and watch for evidence that an assumption has changed. The best design is not the most complicated one; it is the one that gives the team room to evolve.</p>
+    <div class="article-panel"><p><strong>Principle:</strong> Choose the simplest architecture that meets the constraints, then measure where it needs to change.</p></div>
+  </article>
+</BaseLayout>

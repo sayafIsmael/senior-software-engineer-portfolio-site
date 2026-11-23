@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectDiagram from '../../components/sections/ProjectDiagram.astro';
+---
+<BaseLayout title="Multi-tenant Commerce Platform | Abu Sayaf" description="A system design case study covering multi-tenant commerce architecture, data boundaries, order flows, and production concerns.">
+  <article class="article-page container">
+    <a href="/#work" class="article-back">← Back to selected systems</a>
+    <p class="eyebrow" style="margin-top:35px">SYSTEM CASE STUDY / 01</p>
+    <h1>Multi-tenant commerce platform</h1>
+    <p class="article-intro">Bringing storefronts, orders, inventory, and operational workflows together without letting complexity leak across tenants.</p>
+    <div class="article-meta"><span>Full-stack</span><span>Multi-tenant architecture</span><span>Cloud deployment</span><span>Commerce</span></div>
+    <h2>The problem</h2>
+    <p>A commerce platform has to serve distinct businesses while keeping their data and operational workflows separate. The hard part is not the storefront alone; it is maintaining consistent behavior as integrations, order volumes, and product requirements change.</p>
+    <h2>System boundaries</h2>
+    <div class="case-diagram"><ProjectDiagram kind="commerce" /></div>
+    <p>This simplified diagram illustrates the major responsibilities. It is intentionally not a claim that each box is a separate deployable microservice.</p>
+    <h2>The decisions that matter</h2>
+    <ul>
+      <li><strong>Tenant isolation.</strong> Scope access checks, data queries, and cache keys to the correct business context.</li>
+      <li><strong>Order consistency.</strong> Make state transitions explicit and use idempotency where external systems or retries are involved.</li>
+      <li><strong>Operational boundaries.</strong> Keep inventory, payment confirmation, and fulfillment responsibilities understandable.</li>
+      <li><strong>Observability.</strong> Record the events that explain a failed order or an inconsistent stock state.</li>
+      <li><strong>Maintainability.</strong> Split components based on coupling and ownership, not because microservices are fashionable.</li>
+    </ul>
+    <div class="article-panel"><p><strong>Engineering principle:</strong> The goal is a platform that remains comprehensible when the product, team, and traffic grow. Reliability comes from explicit constraints and thoughtful trade-offs.</p></div>
+    <p><em>Note:</em> Exact traffic, uptime, cost, and performance numbers are intentionally omitted until independently verified and approved for publication.</p>
+    <a href="/#book" class="button button--primary">Book a meeting ↗</a>
+  </article>
+</BaseLayout>

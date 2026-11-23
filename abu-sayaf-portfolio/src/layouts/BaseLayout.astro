@@ -1,0 +1,80 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import { site } from '../data/site';
+import '../styles/global.css';
+interface Props { title?: string; description?: string; type?: 'website' | 'article'; }
+const { title = site.name + ' | Senior Software Engineer & Software Architect', description = site.description, type = 'website' } = Astro.props;
+const publicUrl = import.meta.env.PUBLIC_SITE_URL;
+const canonical = publicUrl ? new URL(Astro.url.pathname, publicUrl).href : undefined;
+const sameAs = Object.values(site.links).filter((x) => /^https:\/\//.test(x));
+const schema = [
+  {
+    '@type': 'Person',
+    '@id': canonical ? `${publicUrl}/#person` : undefined,
+    name: site.name,
+    jobTitle: site.role,
+    description: site.description,
+    ...(canonical ? { url: publicUrl } : {}),
+    ...(sameAs.length ? { sameAs } : {}),
+    knowsAbout: ['Software Architecture','Full-Stack Engineering','Distributed Systems','Software Security','Cloud Infrastructure','DevOps','AI-Assisted Software Engineering'],
+  },
+  {
+    '@type': canonical && Astro.url.pathname !== '/' ? 'WebPage' : 'ProfilePage',
+    name: title,
+    description,
+    ...(canonical ? { url: canonical } : {}),
+    about: { '@id': canonical ? `${publicUrl}/#person` : undefined, name: site.name },
+  },
+];
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': schema }).replace(/</g, '\\u003c');
+---
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0e1410" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f4f7f1" media="(prefers-color-scheme: light)" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={site.name} />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {publicUrl && <link rel="sitemap" type="application/xml" href={`${publicUrl}/sitemap-index.xml`} />}
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Abu Sayaf" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {publicUrl && <meta property="og:image" content={`${publicUrl}/images/og-cover.png`} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {publicUrl && <meta name="twitter:image" content={`${publicUrl}/images/og-cover.png`} />}
+    <script type="application/ld+json" set:html={jsonLd}/>
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var theme = stored === 'light' || stored === 'dark' ? stored : 'dark';
+          document.documentElement.setAttribute('data-theme', theme);
+          document.documentElement.style.colorScheme = theme;
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <Header />
+    <main id="main-content"><slot /></main>
+    <Footer />
+    <script>import '../scripts/main.ts';</script>
+  </body>
+</html>

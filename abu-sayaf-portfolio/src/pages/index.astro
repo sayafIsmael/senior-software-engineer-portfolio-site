@@ -1,0 +1,254 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/ui/Icon.astro';
+import CalendlyBooking from '../components/ui/CalendlyBooking.astro';
+import ProjectDiagram from '../components/sections/ProjectDiagram.astro';
+import { site, youtubeId } from '../data/site';
+import { capabilities, architecture, principles, process, projects } from '../data/engineering';
+---
+<BaseLayout>
+  <div class="container">
+    <!-- HERO: avatar + name side by side, role under name, then tagline -->
+    <section class="hero" aria-labelledby="hero-name">
+      <div class="hero-copy">
+        <div class="hero-identity">
+          <div class="hero-avatar">
+            <img src={site.avatar.src} alt={site.avatar.alt} width="112" height="112" decoding="async" fetchpriority="high" />
+            <span class="hero-avatar-tag" title="10 Years of Engineering Experience">
+              <Icon name="award" size={13} />
+              <span>10+ yrs</span>
+            </span>
+          </div>
+          <div class="hero-identity-text">
+            <h1 id="hero-name" class="hero-name">{site.name}</h1>
+            <div class="hero-role-row">
+              <p class="eyebrow hero-eyebrow"><span class="eyebrow-mark"></span>{site.role}</p>
+              <span class="hero-exp-pill" title="10 Years of Professional Software Engineering Experience">
+                <span class="hero-exp-pulse" aria-hidden="true"></span>
+                <Icon name="award" size={13} />
+                <strong>10 Years Experience</strong>
+              </span>
+            </div>
+          </div>
+        </div>
+        <p class="hero-tagline">I design architecture that turns complexity into <span class="accent-text">scalable, secure, reliable</span> products.</p>
+        <p class="hero-intro">{site.intro}</p>
+        <div class="hero-actions">
+          <CalendlyBooking variant="inline" />
+          <a class="button button--ghost" href="#work">Explore work <Icon name="arrow-up-right" size={17}/></a>
+          <a class="text-link text-link--neutral" href="#approach">How I work <Icon name="arrow-down" size={16}/></a>
+        </div>
+      </div>
+      <div class="hero-architecture" data-hero-architecture>
+        <div class="orbit-board" role="group" aria-label="Explore architecture principles">
+          <svg class="orbit-lines" viewBox="0 0 500 370" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="orbit-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="currentColor" stop-opacity="0.65" />
+                <stop offset="100%" stop-color="currentColor" stop-opacity="0.12" />
+              </linearGradient>
+              <radialGradient id="orbit-core-glow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="currentColor" stop-opacity="0.28" />
+                <stop offset="100%" stop-color="currentColor" stop-opacity="0" />
+              </radialGradient>
+              <filter id="orbit-soft" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="1.4" />
+              </filter>
+            </defs>
+            <circle class="orbit-core-glow" cx="250" cy="181" r="78" fill="url(#orbit-core-glow)" />
+            <circle class="orbit-ring orbit-ring--track" cx="250" cy="181" r="136" stroke="currentColor" stroke-width="1" fill="none" opacity=".14" />
+            <circle class="orbit-ring orbit-ring--outer" cx="250" cy="181" r="136" stroke="url(#orbit-glow)" stroke-width="1.35" stroke-dasharray="3 8" fill="none" stroke-linecap="round">
+              <animateTransform attributeName="transform" type="rotate" from="0 250 181" to="360 250 181" dur="22s" repeatCount="indefinite" />
+            </circle>
+            <circle class="orbit-ring orbit-ring--mid" cx="250" cy="181" r="110" stroke="currentColor" stroke-width="1" stroke-dasharray="1 10" fill="none" opacity=".2">
+              <animateTransform attributeName="transform" type="rotate" from="360 250 181" to="0 250 181" dur="16s" repeatCount="indefinite" />
+            </circle>
+            <circle class="orbit-ring orbit-ring--inner" cx="250" cy="181" r="86" stroke="currentColor" stroke-width="1.15" stroke-dasharray="18 10 4 10" fill="none" opacity=".28">
+              <animateTransform attributeName="transform" type="rotate" from="0 250 181" to="-360 250 181" dur="12s" repeatCount="indefinite" />
+            </circle>
+            <g class="orbit-spokes" stroke="currentColor" stroke-width="1.25" fill="none" opacity=".55">
+              <path data-spoke="architecture" d="M250 145V52" />
+              <path data-spoke="scalability" d="M214 155 108 108" />
+              <path data-spoke="reliability" d="M286 155 392 108" />
+              <path data-spoke="security" d="M214 208 108 262" />
+              <path data-spoke="observability" d="M286 208 392 262" />
+              <path data-spoke="delivery" d="M250 217V316" />
+            </g>
+            <g class="orbit-spoke-flows" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+              <path class="orbit-flow" data-flow="architecture" d="M250 145V52" stroke-dasharray="12 140" />
+              <path class="orbit-flow" data-flow="scalability" d="M214 155 108 108" stroke-dasharray="12 140" />
+              <path class="orbit-flow" data-flow="reliability" d="M286 155 392 108" stroke-dasharray="12 140" />
+              <path class="orbit-flow" data-flow="security" d="M214 208 108 262" stroke-dasharray="12 140" />
+              <path class="orbit-flow" data-flow="observability" d="M286 208 392 262" stroke-dasharray="12 140" />
+              <path class="orbit-flow" data-flow="delivery" d="M250 217V316" stroke-dasharray="12 140" />
+            </g>
+            <circle class="orbit-pulse" cx="250" cy="181" r="52" fill="none" stroke="currentColor" stroke-width="1" />
+            <circle class="orbit-pulse orbit-pulse--late" cx="250" cy="181" r="64" fill="none" stroke="currentColor" stroke-width=".8" />
+            <g class="orbit-hubs" fill="currentColor">
+              <circle class="orbit-dot" cx="250" cy="114" r="3" data-hub="architecture" />
+              <circle class="orbit-dot" cx="250" cy="248" r="3" data-hub="delivery" />
+              <circle class="orbit-dot" cx="185" cy="155" r="3" data-hub="scalability" />
+              <circle class="orbit-dot" cx="318" cy="155" r="3" data-hub="reliability" />
+              <circle class="orbit-dot" cx="185" cy="205" r="3" data-hub="security" />
+              <circle class="orbit-dot" cx="319" cy="205" r="3" data-hub="observability" />
+            </g>
+            <circle class="orbit-tracer" r="4.2" fill="currentColor" filter="url(#orbit-soft)">
+              <animateMotion dur="11s" repeatCount="indefinite" path="M250,45 A136,136 0 1,1 249.9,45" />
+            </circle>
+            <circle class="orbit-tracer orbit-tracer--mid" r="3" fill="currentColor">
+              <animateMotion dur="8s" repeatCount="indefinite" path="M250,71 A110,110 0 1,0 249.9,71" />
+            </circle>
+            <circle class="orbit-tracer orbit-tracer--inner" r="2.6" fill="currentColor">
+              <animateMotion dur="6.5s" repeatCount="indefinite" path="M250,95 A86,86 0 1,1 249.9,95" />
+            </circle>
+          </svg>
+          <button type="button" class="orbit-node orbit-node--top" data-orbit="architecture" aria-pressed="true"><Icon name="layers" size={14}/> System design</button>
+          <button type="button" class="orbit-node orbit-node--left-top" data-orbit="scalability" aria-pressed="false"><Icon name="trending-up" size={14}/> Scalability</button>
+          <button type="button" class="orbit-node orbit-node--right-top" data-orbit="reliability" aria-pressed="false"><Icon name="shield-check" size={14}/> Reliability</button>
+          <button type="button" class="orbit-node orbit-node--left-bottom" data-orbit="security" aria-pressed="false"><Icon name="shield-check" size={14}/> Cybersecurity</button>
+          <button type="button" class="orbit-node orbit-node--right-bottom" data-orbit="observability" aria-pressed="false"><Icon name="activity" size={14}/> Observability</button>
+          <button type="button" class="orbit-node orbit-node--bottom" data-orbit="delivery" aria-pressed="false"><Icon name="trending-up" size={14}/> Delivery</button>
+          <div class="orbit-center" aria-hidden="true"><span class="orbit-center-ring"></span><Icon name="layers" size={26}/><strong>Architecture</strong></div>
+        </div>
+        <p class="orbit-caption" data-orbit-caption aria-live="polite">I shape clear boundaries and trade-offs that hold under real production pressure.</p>
+      </div>
+    </section>
+
+    <section class="section section-rule" aria-labelledby="value-title">
+      <div class="section-heading section-heading--tight"><div><p class="eyebrow"><span class="eyebrow-mark"></span> The value I bring</p><h2 id="value-title">Why teams hire me</h2></div></div>
+      <div class="capability-grid">
+        {capabilities.map(({ icon, title }, index) => (
+          <article class:list={['capability-card', { 'capability-card--featured': index === 0 }]}>
+            <Icon name={icon} size={27}/>
+            <h3>{title}</h3>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="work" class="section section-rule" aria-labelledby="work-title">
+      <div class="section-heading"><div><p class="eyebrow"><span class="eyebrow-mark"></span> Work / systems</p><h2 id="work-title">Systems I architected & built</h2></div><p class="section-side-note">Real decisions. Real constraints. End-to-end ownership.</p></div>
+      <div class="project-list">
+        {projects.map(({ number, title, description, status, href, diagram }) => (
+          <article class="project-row">
+            <div class="project-copy">
+              <div class="project-title-line"><span class="project-number">{number}<span aria-hidden="true"> /</span></span><h3>{title}</h3></div>
+              <p>{description}</p>
+              <div class="project-actions"><span class="project-status">{status}</span><a class="text-link" href={href}>Architecture & decisions <Icon name="arrow-up-right" size={16}/></a></div>
+            </div>
+            <ProjectDiagram kind={diagram} />
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="architecture" class="section section-rule" aria-labelledby="architecture-title">
+      <div class="section-heading"><div><p class="eyebrow"><span class="eyebrow-mark"></span> The thinking behind the system</p><h2 id="architecture-title">Architecture thinking</h2><p class="section-lead">From requirements to operational resilience — each decision has a reason.</p></div></div>
+      <div class="architecture-stage" data-architecture-stage>
+        <div class="architecture-steps" role="group" aria-label="Explore engineering architecture stages">
+          {architecture.map(({ icon, name, detail }, index) => (
+            <>
+              {index > 0 && <span class="architecture-arrow" aria-hidden="true">→</span>}
+              <button type="button" class="architecture-step" data-architecture-step={index} data-architecture-detail={detail} aria-pressed={index === 0 ? 'true' : 'false'}>
+                <Icon name={icon} size={24}/><span>{name}</span>
+              </button>
+            </>
+          ))}
+        </div>
+        <div class="architecture-description" aria-live="polite"><Icon name="check-circle" size={18}/><span data-architecture-description>{architecture[0].detail}</span></div>
+        <p class="architecture-outcomes"><span class="outcome-line" aria-hidden="true"></span>SCALABLE <span class="dot">•</span> SECURE <span class="dot">•</span> RELIABLE <span class="dot">•</span> PRODUCTION-READY <span class="outcome-line" aria-hidden="true"></span></p>
+      </div>
+    </section>
+
+    <section id="approach" class="section section-rule" aria-labelledby="approach-title">
+      <div class="section-heading"><div><p class="eyebrow"><span class="eyebrow-mark"></span> Engineering principles</p><h2 id="approach-title">How I engineer</h2></div><p class="section-side-note">Deliberate choices. Dependable delivery.</p></div>
+      <div class="principle-list">
+        {principles.map(({ icon, title, summary, detail }) => (
+          <details class="principle">
+            <summary><span class="principle-title"><Icon name={icon} size={21}/><strong>{title}</strong></span><span class="principle-summary">{summary}</span><Icon name="chevron-down" size={18} class="principle-chevron"/></summary>
+            <div class="principle-body"><p>{detail}</p></div>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="section section-rule" aria-labelledby="process-title">
+      <div class="section-heading"><div><p class="eyebrow"><span class="eyebrow-mark"></span> From idea to operation</p><h2 id="process-title">My process</h2><p class="section-lead">A repeatable loop, not a one-way checklist.</p></div></div>
+      <div class="process-shell" data-process>
+        <svg viewBox="0 0 1100 90" preserveAspectRatio="none" class="process-line" aria-hidden="true">
+          <path d="M92 28 C180 10 220 62 275 62 S400 10 458 28 S560 62 642 62 S760 10 825 28 S940 62 1008 62" fill="none" stroke="currentColor" stroke-width="2.1" stroke-dasharray="2 9" stroke-linecap="round"/>
+          <circle cx="92" cy="28" r="4" fill="currentColor" opacity=".55"/><circle cx="275" cy="62" r="4" fill="currentColor" opacity=".55"/><circle cx="458" cy="28" r="4" fill="currentColor" opacity=".55"/><circle cx="642" cy="62" r="4" fill="currentColor" opacity=".55"/><circle cx="825" cy="28" r="4" fill="currentColor" opacity=".55"/><circle cx="1008" cy="62" r="4" fill="currentColor" opacity=".55"/>
+        </svg>
+        <div class="process-steps" role="group" aria-label="Select a stage of the engineering process">
+          {process.map(({ icon, name, detail }, index) => (
+            <button type="button" class="process-step" data-process-step={index} data-process-detail-text={detail} aria-pressed={index === 0 ? 'true' : 'false'}>
+              <span class="process-icon"><Icon name={icon} size={22}/></span><strong>{name}</strong>
+            </button>
+          ))}
+        </div>
+        <p class="process-detail" aria-live="polite"><span class="process-detail-number" data-process-number>01</span><span data-process-detail>{process[0].detail}</span></p>
+      </div>
+    </section>
+
+    <section id="upwork" class="section section-rule" aria-labelledby="upwork-title">
+      <div class="section-heading section-heading--tight"><div><p class="eyebrow"><span class="eyebrow-mark"></span> Freelance experience</p><h2 id="upwork-title">Upwork</h2></div></div>
+      <div class="upwork-layout">
+        <div class="upwork-badges">
+          <span class="soft-badge soft-badge--accent"><Icon name="award" size={18}/><span class="soft-badge__label">Previously Top Rated</span></span>
+          <span class="soft-badge soft-badge--earn"><Icon name="coins" size={18}/><span class="soft-badge__label"><strong>{site.upwork.totalEarned}</strong> earned</span></span>
+        </div>
+        <p>Client-facing engineering work, from architecture decisions to shipped products and long-term systems support.</p>
+        {site.links.upwork ? (<a class="text-link" href={site.links.upwork} target="_blank" rel="noopener noreferrer">View Upwork profile <Icon name="arrow-up-right" size={16}/></a>) : (<span class="text-link text-link--disabled" title="Add your Upwork URL in src/data/site.ts">Upwork profile <span class="link-pending">link pending</span></span>)}
+      </div>
+    </section>
+
+    <section id="videos" class="section section-rule" aria-labelledby="video-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-mark"></span> Ideas, explained</p>
+          <h2 id="video-title">Engineering videos</h2>
+          <p class="section-lead">Clear walkthroughs of system design, reliable software, and responsible AI workflows.</p>
+        </div>
+        {site.links.youtube && <a class="text-link" href={site.links.youtube} rel="noopener noreferrer" target="_blank">Channel <Icon name="arrow-up-right" size={16}/></a>}
+      </div>
+      <div class="video-grid">
+        {site.videos.map((video, index) => {
+          const id = youtubeId(video.url);
+          const watchUrl = id ? `https://www.youtube.com/watch?v=${id}` : video.url;
+          const thumb = id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : '';
+          return id ? (
+            <a href={watchUrl} target="_blank" rel="noopener noreferrer" class="video-card">
+              <span class="video-thumb">
+                <img src={thumb} alt="" width="480" height="270" loading="lazy" decoding="async" />
+                <span class="video-play" aria-hidden="true"><Icon name="play" size={22}/></span>
+              </span>
+              <span class="video-copy">
+                <strong>{video.title}</strong>
+                <small>{video.subject}</small>
+              </span>
+            </a>
+          ) : (
+            <article class="video-card video-card--pending" title="Add a YouTube URL in src/data/site.ts">
+              <span class="video-thumb video-thumb--empty">
+                <span class="video-play" aria-hidden="true"><Icon name="play" size={22}/></span>
+                <span class="video-index">0{index + 1}</span>
+              </span>
+              <span class="video-copy">
+                <strong>{video.title}</strong>
+                <small>{video.subject}</small>
+              </span>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+
+    <section id="notes" class="section section-rule" aria-labelledby="notes-title">
+      <div class="section-heading section-heading--tight"><div><p class="eyebrow"><span class="eyebrow-mark"></span> Technical writing</p><h2 id="notes-title">Engineering notes</h2></div></div>
+      <div class="notes-grid">
+        <a class="note-link" href="/notes/architecture-decisions/"><Icon name="file-text" size={21}/><span>Why good architecture reduces complexity</span><Icon name="arrow-up-right" size={16}/></a>
+        <a class="note-link" href="/notes/ai-assisted-engineering/"><Icon name="file-text" size={21}/><span>AI is useful when judgment stays human</span><Icon name="arrow-up-right" size={16}/></a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
