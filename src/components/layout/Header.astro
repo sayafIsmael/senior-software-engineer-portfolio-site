@@ -1,6 +1,7 @@
 ---
 import Icon from '../ui/Icon.astro';
 import CalendlyBooking from '../ui/CalendlyBooking.astro';
+import { site } from '../../data/site';
 
 const links = [
   { href: '/#work', label: 'Work' },
@@ -12,7 +13,12 @@ const links = [
 ---
 <header class="site-header-wrapper" id="top">
   <div class="site-header container">
-    <a class="brand" href="/" aria-label="Abu Sayaf, home">Abu Sayaf <span class="brand-slash" aria-hidden="true">/</span></a>
+    <div class="header-brand-group">
+      <a class="header-avatar-link" href="/" aria-label="Abu Sayaf, home" data-header-avatar>
+        <img src={site.avatar.src} alt={site.avatar.alt} width="36" height="36" class="header-avatar-img" />
+      </a>
+      <a class="brand" href="/" aria-label="Abu Sayaf, home">Abu Sayaf <span class="brand-slash" aria-hidden="true">/</span></a>
+    </div>
     <button type="button" class="menu-toggle" aria-controls="main-navigation" aria-expanded="false" aria-label="Open navigation" data-menu-toggle>
       <span class="menu-toggle__bar"></span><span class="menu-toggle__bar"></span><span class="menu-toggle__bar"></span>
     </button>

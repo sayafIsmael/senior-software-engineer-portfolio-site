@@ -368,6 +368,31 @@ function init(): void {
       });
     });
   }
+
+  // Header avatar visibility based on Hero viewport presence
+  const headerAvatar = document.querySelector<HTMLElement>('[data-header-avatar]');
+  const heroSection = document.querySelector<HTMLElement>('.hero');
+  if (headerAvatar) {
+    if (heroSection) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            // When hero is NOT intersecting (out of view), show avatar in header
+            if (!entry.isIntersecting) {
+              headerAvatar.classList.add('is-visible');
+            } else {
+              headerAvatar.classList.remove('is-visible');
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      observer.observe(heroSection);
+    } else {
+      // On non-index pages where there is no hero section, show it always
+      headerAvatar.classList.add('is-visible');
+    }
+  }
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
