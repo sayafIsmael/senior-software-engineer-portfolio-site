@@ -198,53 +198,57 @@ import { capabilities, architecture, principles, process, projects } from '../da
       </div>
     </section>
 
-    <section id="videos" class="section section-rule" aria-labelledby="video-title">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow"><span class="eyebrow-mark"></span> Ideas, explained</p>
-          <h2 id="video-title">Engineering videos</h2>
-          <p class="section-lead">Clear walkthroughs of system design, reliable software, and responsible AI workflows.</p>
+    {site.showVideos && (
+      <section id="videos" class="section section-rule" aria-labelledby="video-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-mark"></span> Ideas, explained</p>
+            <h2 id="video-title">Engineering videos</h2>
+            <p class="section-lead">Clear walkthroughs of system design, reliable software, and responsible AI workflows.</p>
+          </div>
+          {site.links.youtube && <a class="text-link" href={site.links.youtube} rel="noopener noreferrer" target="_blank">Channel <Icon name="arrow-up-right" size={16}/></a>}
         </div>
-        {site.links.youtube && <a class="text-link" href={site.links.youtube} rel="noopener noreferrer" target="_blank">Channel <Icon name="arrow-up-right" size={16}/></a>}
-      </div>
-      <div class="video-grid">
-        {site.videos.map((video, index) => {
-          const id = youtubeId(video.url);
-          const watchUrl = id ? `https://www.youtube.com/watch?v=${id}` : video.url;
-          const thumb = id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : '';
-          return id ? (
-            <a href={watchUrl} target="_blank" rel="noopener noreferrer" class="video-card">
-              <span class="video-thumb">
-                <img src={thumb} alt="" width="480" height="270" loading="lazy" decoding="async" />
-                <span class="video-play" aria-hidden="true"><Icon name="play" size={22}/></span>
-              </span>
-              <span class="video-copy">
-                <strong>{video.title}</strong>
-                <small>{video.subject}</small>
-              </span>
-            </a>
-          ) : (
-            <article class="video-card video-card--pending" title="Add a YouTube URL in src/data/site.ts">
-              <span class="video-thumb video-thumb--empty">
-                <span class="video-play" aria-hidden="true"><Icon name="play" size={22}/></span>
-                <span class="video-index">0{index + 1}</span>
-              </span>
-              <span class="video-copy">
-                <strong>{video.title}</strong>
-                <small>{video.subject}</small>
-              </span>
-            </article>
-          );
-        })}
-      </div>
-    </section>
+        <div class="video-grid">
+          {site.videos.map((video, index) => {
+            const id = youtubeId(video.url);
+            const watchUrl = id ? `https://www.youtube.com/watch?v=${id}` : video.url;
+            const thumb = id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : '';
+            return id ? (
+              <a href={watchUrl} target="_blank" rel="noopener noreferrer" class="video-card">
+                <span class="video-thumb">
+                  <img src={thumb} alt="" width="480" height="270" loading="lazy" decoding="async" />
+                  <span class="video-play" aria-hidden="true"><Icon name="play" size={22}/></span>
+                </span>
+                <span class="video-copy">
+                  <strong>{video.title}</strong>
+                  <small>{video.subject}</small>
+                </span>
+              </a>
+            ) : (
+              <article class="video-card video-card--pending" title="Add a YouTube URL in src/data/site.ts">
+                <span class="video-thumb video-thumb--empty">
+                  <span class="video-play" aria-hidden="true"><Icon name="play" size={22}/></span>
+                  <span class="video-index">0{index + 1}</span>
+                </span>
+                <span class="video-copy">
+                  <strong>{video.title}</strong>
+                  <small>{video.subject}</small>
+                </span>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    )}
 
-    <section id="notes" class="section section-rule" aria-labelledby="notes-title">
-      <div class="section-heading section-heading--tight"><div><p class="eyebrow"><span class="eyebrow-mark"></span> Technical writing</p><h2 id="notes-title">Engineering notes</h2></div></div>
-      <div class="notes-grid">
-        <a class="note-link" href="/notes/architecture-decisions/"><Icon name="file-text" size={21}/><span>Why good architecture reduces complexity</span><Icon name="arrow-up-right" size={16}/></a>
-        <a class="note-link" href="/notes/ai-assisted-engineering/"><Icon name="file-text" size={21}/><span>AI is useful when judgment stays human</span><Icon name="arrow-up-right" size={16}/></a>
-      </div>
-    </section>
+    {site.showNotes && (
+      <section id="notes" class="section section-rule" aria-labelledby="notes-title">
+        <div class="section-heading section-heading--tight"><div><p class="eyebrow"><span class="eyebrow-mark"></span> Technical writing</p><h2 id="notes-title">Engineering notes</h2></div></div>
+        <div class="notes-grid">
+          <a class="note-link" href="/notes/architecture-decisions/"><Icon name="file-text" size={21}/><span>Why good architecture reduces complexity</span><Icon name="arrow-up-right" size={16}/></a>
+          <a class="note-link" href="/notes/ai-assisted-engineering/"><Icon name="file-text" size={21}/><span>AI is useful when judgment stays human</span><Icon name="arrow-up-right" size={16}/></a>
+        </div>
+      </section>
+    )}
   </div>
 </BaseLayout>

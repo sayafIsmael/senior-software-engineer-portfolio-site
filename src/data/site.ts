@@ -34,6 +34,8 @@ export const site = {
     formerlyTopRated: true,
     totalEarned: '$40k+', // supplied by the portfolio owner
   },
+  showVideos: false, // Set to true whenever ready to show engineering videos section
+  showNotes: false, // Set to true whenever ready to show engineering notes section
   videos: [
     { title: 'System design in practice', subject: 'Architecture · decision-making', url: '' },
     { title: 'Building reliable systems', subject: 'Engineering · operations', url: '' },
