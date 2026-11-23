@@ -747,7 +747,7 @@ a.video-card:hover .video-play { transform: translate(-50%, -50%) scale(1.06); }
 /* Booking / Calendly — Compact two‑column layout */
 .booking-panel {
   display: grid;
-  grid-template-columns: 1fr minmax(0, 220px);
+  grid-template-columns: minmax(280px, 1fr) minmax(0, 286px);
   gap: 20px;
   align-items: start;
   margin: 12px 0 6px;
