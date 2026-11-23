@@ -2,28 +2,60 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectDiagram from '../../components/sections/ProjectDiagram.astro';
 ---
-<BaseLayout title="Multi-tenant Commerce Platform | Abu Sayaf" description="A system design case study covering multi-tenant commerce architecture, data boundaries, order flows, and production concerns.">
+<BaseLayout
+  title="Easy Commerce — Multi-tenant E‑Commerce Platform | Abu Sayaf"
+  description="A production e‑commerce platform engineered for online and social commerce sellers. Covers order management, inventory, courier logistics, and unified omnichannel operations."
+>
   <article class="article-page container">
     <a href="/#work" class="article-back">← Back to selected systems</a>
     <p class="eyebrow" style="margin-top:35px">SYSTEM CASE STUDY / 01</p>
-    <h1>Multi-tenant commerce platform</h1>
-    <p class="article-intro">Bringing storefronts, orders, inventory, and operational workflows together without letting complexity leak across tenants.</p>
-    <div class="article-meta"><span>Full-stack</span><span>Multi-tenant architecture</span><span>Cloud deployment</span><span>Commerce</span></div>
+    <h1>Easy Commerce — multi‑tenant e‑commerce platform</h1>
+    <p class="article-intro">
+      A unified commerce platform built for online retailers and social‑commerce (F‑commerce) sellers — bringing orders, inventory, logistics, and storefront management into one coherent, scalable system.
+    </p>
+    <div class="article-meta">
+      <span>Full-stack</span>
+      <span>Multi-tenant architecture</span>
+      <span>Cloud deployment</span>
+      <span>Order management</span>
+      <span>F‑Commerce / Social commerce</span>
+    </div>
+
     <h2>The problem</h2>
-    <p>A commerce platform has to serve distinct businesses while keeping their data and operational workflows separate. The hard part is not the storefront alone; it is maintaining consistent behavior as integrations, order volumes, and product requirements change.</p>
+    <p>
+      Online and social‑commerce sellers operate across multiple channels simultaneously — websites, Facebook pages, and offline stores. Without a unified system, orders fall through the cracks, inventory data grows stale, and courier handoffs require tedious manual re‑entry. The result is missed sales, customer frustration, and unscalable operations.
+    </p>
+
     <h2>System boundaries</h2>
     <div class="case-diagram"><ProjectDiagram kind="commerce" /></div>
-    <p>This simplified diagram illustrates the major responsibilities. It is intentionally not a claim that each box is a separate deployable microservice.</p>
+    <p>
+      This diagram illustrates the major responsibility boundaries. Each box represents a logical ownership domain — not necessarily a separate deployable microservice.
+    </p>
+
+    <h2>Core capabilities</h2>
+    <ul>
+      <li><strong>Centralised order management.</strong> Consolidates orders from social pages, online storefronts, and offline channels into a single workflow — statuses move from pending → processing → shipped → delivered with no manual re‑entry.</li>
+      <li><strong>Catalogue & product management.</strong> Add, edit, and organise product listings, variants, pricing, and stock descriptions. Changes propagate instantly across all connected storefronts.</li>
+      <li><strong>Real‑time inventory tracking.</strong> Stock levels update as orders are confirmed, preventing overselling and triggering low‑stock alerts before supply runs out.</li>
+      <li><strong>Courier & logistics integration.</strong> Automates parcel hand‑off data to delivery partners, eliminating duplicate entry and reducing missed shipments.</li>
+      <li><strong>Hybrid online + offline operations.</strong> Syncs digital storefronts with traditional offline sales channels, giving merchants one dashboard for the entire business.</li>
+      <li><strong>Mobile‑optimised dashboards.</strong> Merchants manage their full workflow from any device, with responsive UI that surfaces the most important actions first.</li>
+    </ul>
+
     <h2>The decisions that matter</h2>
     <ul>
-      <li><strong>Tenant isolation.</strong> Scope access checks, data queries, and cache keys to the correct business context.</li>
-      <li><strong>Order consistency.</strong> Make state transitions explicit and use idempotency where external systems or retries are involved.</li>
-      <li><strong>Operational boundaries.</strong> Keep inventory, payment confirmation, and fulfillment responsibilities understandable.</li>
-      <li><strong>Observability.</strong> Record the events that explain a failed order or an inconsistent stock state.</li>
-      <li><strong>Maintainability.</strong> Split components based on coupling and ownership, not because microservices are fashionable.</li>
+      <li><strong>Tenant isolation.</strong> Every merchant's data, order streams, and inventory are strictly scoped to their own context — shared infrastructure, isolated state.</li>
+      <li><strong>Order state machine.</strong> Explicit, auditable transitions prevent orders from being skipped, double‑processed, or silently lost.</li>
+      <li><strong>Idempotent courier calls.</strong> External logistics APIs are called with idempotency keys so network retries never duplicate shipments.</li>
+      <li><strong>Observability first.</strong> Every order event, state change, and stock mutation is logged with enough context to reconstruct exactly what happened and why.</li>
+      <li><strong>Maintainability over micro‑services.</strong> Components are split along ownership boundaries and coupling, not for the sake of a distributed‑systems aesthetic.</li>
     </ul>
-    <div class="article-panel"><p><strong>Engineering principle:</strong> The goal is a platform that remains comprehensible when the product, team, and traffic grow. Reliability comes from explicit constraints and thoughtful trade-offs.</p></div>
-    <p><em>Note:</em> Exact traffic, uptime, cost, and performance numbers are intentionally omitted until independently verified and approved for publication.</p>
+
+    <div class="article-panel">
+      <p><strong>Live platform:</strong> <a href="https://commerce.bajutech.com/" target="_blank" rel="noopener noreferrer">commerce.bajutech.com</a> — a production system serving real merchants across online and social‑commerce channels.</p>
+    </div>
+
+    <a href="https://commerce.bajutech.com/" target="_blank" rel="noopener noreferrer" class="button button--primary" style="margin-right:12px">View live platform ↗</a>
     <a href="/#book" class="button button--primary">Book a meeting ↗</a>
   </article>
 </BaseLayout>

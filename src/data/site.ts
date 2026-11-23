@@ -16,21 +16,14 @@ export const site = {
   experienceStatement: 'Designing resilient, efficient, AI-integrated systems built to scale, stay secure, and perform in production.',
   description: 'Abu Sayaf is a senior full-stack software engineer with 10 years of experience in software architecture, distributed systems, security-aware engineering, and production delivery.',
   links: {
-    email: '',        // e.g. hello@your-domain.com
-    github: '',       // e.g. https://github.com/your-handle
-    linkedin: '',     // e.g. https://www.linkedin.com/in/your-handle/
-    upwork: 'https://www.upwork.com/freelancers/~016c0b856d16bae9fa',       // paste your real Upwork profile URL
-    youtube: '',      // paste your real YouTube channel URL
+    email: '', // e.g. hello@your-domain.com
+    github: '', // e.g. https://github.com/your-handle
+    linkedin: '', // e.g. https://www.linkedin.com/in/your-handle/
+    upwork: 'https://www.upwork.com/freelancers/~016c0b856d16bae9fa', // paste your real Upwork profile URL
+    youtube: '', // paste your real YouTube channel URL
     calendly: 'https://calendly.com/sayaf',
     automation: 'https://inbox.bajutech.com/',
     ecommerce: 'https://commerce.bajutech.com/',
-
-    email: '',        // e.g. hello@your-domain.com
-    github: '',       // e.g. https://github.com/your-handle
-    linkedin: '',     // e.g. https://www.linkedin.com/in/your-handle/
-    upwork: 'https://www.upwork.com/freelancers/~016c0b856d16bae9fa',       // paste your real Upwork profile URL
-    youtube: '',      // paste your real YouTube channel URL
-    calendly: 'https://calendly.com/sayaf',
   },
   booking: {
     label: 'Book a meeting',

@@ -2,26 +2,57 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectDiagram from '../../components/sections/ProjectDiagram.astro';
 ---
-<BaseLayout title="Automation & Operational Visibility | Abu Sayaf" description="An engineering design exploration for reliable order-event notifications, acknowledgment workflows, and production observability.">
+<BaseLayout
+  title="Inbox — Automation & Operational Visibility | Abu Sayaf"
+  description="A unified omnichannel inbox and business automation platform. Centralises customer messages, order events, fraud checks, and courier workflows into a single observable system."
+>
   <article class="article-page container">
     <a href="/#work" class="article-back">← Back to selected systems</a>
     <p class="eyebrow" style="margin-top:35px">SYSTEM DESIGN EXPLORATION / 02</p>
-    <h1>Automation & operational visibility</h1>
-    <p class="article-intro">A practical approach to turning important business events into reliable, acknowledged, observable work.</p>
-    <div class="article-meta"><span>Event-driven design</span><span>Reliability</span><span>Workflow automation</span><span>Design exploration</span></div>
+    <h1>Inbox — automation &amp; operational visibility</h1>
+    <p class="article-intro">
+      A unified omnichannel communication and workflow automation system that transforms incoming business events — customer messages, orders, fraud signals — into acknowledged, observable, and reliably processed outcomes.
+    </p>
+    <div class="article-meta">
+      <span>Event-driven design</span>
+      <span>Omnichannel inbox</span>
+      <span>Reliability</span>
+      <span>Workflow automation</span>
+      <span>Fraud prevention</span>
+    </div>
+
     <h2>The problem</h2>
-    <p>When a new order or urgent operational event arrives, notifying someone is only the beginning. The system also needs to know whether the event was delivered, acknowledged, retried, or escalated.</p>
+    <p>
+      Merchants receive customer queries, order notifications, and operational alerts across multiple channels simultaneously. Without a centralised system, messages are missed, orders go unacknowledged, and fraud slips through. Notifying someone is only the beginning — the system must also know whether the event was delivered, acted on, retried, or escalated.
+    </p>
+
     <h2>Conceptual flow</h2>
     <div class="case-diagram"><ProjectDiagram kind="automation" /></div>
+
+    <h2>Core capabilities</h2>
+    <ul>
+      <li><strong>Unified omnichannel inbox.</strong> Centralises customer messages, comments, and queries from multiple social and web channels into a single merchant dashboard — no channel goes unwatched.</li>
+      <li><strong>Order‑linked conversations.</strong> Every customer thread is attached to its related order, so support and fulfilment context are always visible in one place.</li>
+      <li><strong>Fraud risk assessment.</strong> Built‑in checks analyse customer history, delivery success rates, and behavioural signals before shipment — especially important for Cash‑on‑Delivery orders.</li>
+      <li><strong>Automated order capture.</strong> Incoming orders from social and web channels are captured automatically, preventing missed sales during high‑volume periods.</li>
+      <li><strong>Courier workflow automation.</strong> Parcel hand‑off to logistics partners is automated, eliminating duplicate data entry and ensuring dispatch happens on time.</li>
+      <li><strong>Acknowledgment state tracking.</strong> An alert being sent is not an alert being handled. The system tracks delivery, acknowledgment, and escalation state explicitly.</li>
+    </ul>
+
     <h2>Architecture decisions</h2>
     <ul>
-      <li><strong>Durable events.</strong> Important changes need persistent identifiers and predictable delivery behavior.</li>
-      <li><strong>Idempotency.</strong> Duplicate deliveries must not create duplicate business actions.</li>
-      <li><strong>Acknowledgment state.</strong> An alert being sent is not equivalent to an alert being handled.</li>
-      <li><strong>Retries and escalation.</strong> Use bounded attempts, backoff, and a clear recovery path.</li>
-      <li><strong>Visibility.</strong> Measure missed events, queue age, retry rates, and time to acknowledgment.</li>
+      <li><strong>Durable events.</strong> Important business changes carry persistent identifiers and predictable delivery behaviour so nothing is silently lost.</li>
+      <li><strong>Idempotency.</strong> Duplicate event deliveries cannot create duplicate business actions — retries are safe by design.</li>
+      <li><strong>Acknowledgment state.</strong> The system distinguishes between "sent", "delivered", "read", and "acted on" — each is a distinct, observable state.</li>
+      <li><strong>Retries and escalation.</strong> Bounded retry attempts, exponential backoff, and a clear escalation path prevent silent failures.</li>
+      <li><strong>Visibility.</strong> Missed events, queue depth, retry rates, and time‑to‑acknowledgment are all measured and surfaced in operational dashboards.</li>
     </ul>
-    <div class="article-panel"><p><strong>Status:</strong> This page is a system-design exploration. It does not claim a deployed implementation, customer results, or production metrics that have not been verified.</p></div>
+
+    <div class="article-panel">
+      <p><strong>Live platform:</strong> <a href="https://inbox.bajutech.com/" target="_blank" rel="noopener noreferrer">inbox.bajutech.com</a> — a production automation and inbox system serving merchants across omnichannel commerce workflows.</p>
+    </div>
+
+    <a href="https://inbox.bajutech.com/" target="_blank" rel="noopener noreferrer" class="button button--primary" style="margin-right:12px">View live platform ↗</a>
     <a href="/#book" class="button button--primary">Book a meeting ↗</a>
   </article>
 </BaseLayout>

@@ -11,7 +11,7 @@ const { variant = 'panel', class: className = '' } = Astro.props;
 const url: string = site.links.calendly;
 const hasUrl = url.startsWith('https://');
 
-// Accurate month calendar calculation
+// Accurate build-time month calculation (hydrated & kept 100% dynamic on client)
 const now = new Date();
 const currentYear = now.getFullYear();
 const currentMonthIndex = now.getMonth();
@@ -23,7 +23,6 @@ const weekdayShort = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
 // 1st day of month (0 = Sun, 1 = Mon, ..., 6 = Sat)
 const firstDayOfWeek = new Date(currentYear, currentMonthIndex, 1).getDay();
-// Total days in month
 const daysInMonth = new Date(currentYear, currentMonthIndex + 1, 0).getDate();
 const todayDate = now.getDate();
 
@@ -32,44 +31,36 @@ interface CalendarCell {
   day?: number;
   isPast?: boolean;
   isToday?: boolean;
-  isWeekend?: boolean;
   isAvailable?: boolean;
   dateLabel?: string;
 }
 
 const calendarCells: CalendarCell[] = [];
 
-// Leading empty cells
 for (let i = 0; i < firstDayOfWeek; i++) {
   calendarCells.push({ blank: true });
 }
 
-// Actual days of month
 for (let day = 1; day <= daysInMonth; day++) {
-  const d = new Date(currentYear, currentMonthIndex, day);
-  const dow = d.getDay();
-  const isWeekend = dow === 0 || dow === 6;
   const isPast = day < todayDate;
   const isToday = day === todayDate;
-  const isAvailable = !isPast && !isWeekend;
   calendarCells.push({
     blank: false,
     day,
     isPast,
     isToday,
-    isWeekend,
-    isAvailable,
+    isAvailable: !isPast,
     dateLabel: `${fullMonthNames[currentMonthIndex]} ${day}, ${currentYear}`,
   });
 }
 ---
 {variant === 'inline' ? (
-  <a class:list={['button', 'button--primary', 'booking-cta', className]} href={hasUrl ? url : '#book'} data-calendly-link={hasUrl ? true : undefined} target={hasUrl ? '_blank' : undefined} rel={hasUrl ? 'noopener noreferrer' : undefined}>
+  <a class:list={['button', 'button--primary', 'booking-cta', className]} href={hasUrl ? url : '#book'} target={hasUrl ? '_blank' : undefined} rel={hasUrl ? 'noopener noreferrer' : undefined}>
     <Icon name="calendar" size={17} /> {site.booking.label}
   </a>
 ) : variant === 'compact' ? (
   <div class:list={['booking-compact', className]}>
-    <a class="button button--primary booking-cta" href={hasUrl ? url : '#book'} data-calendly-link={hasUrl ? true : undefined} target={hasUrl ? '_blank' : undefined} rel={hasUrl ? 'noopener noreferrer' : undefined}>
+    <a class="button button--primary booking-cta" href={hasUrl ? url : '#book'} target={hasUrl ? '_blank' : undefined} rel={hasUrl ? 'noopener noreferrer' : undefined}>
       <Icon name="calendar" size={17} /> {site.booking.label}
     </a>
   </div>
@@ -78,36 +69,37 @@ for (let day = 1; day <= daysInMonth; day++) {
     <div class="booking-copy">
       <div class="booking-badge">
         <span class="booking-status-indicator"></span>
-        <span>Open for architecture & consulting</span>
+        <span>Live Schedule · Instant Booking</span>
       </div>
-      <h3>Book a focused working session</h3>
-      <p>{site.booking.blurb}</p>
+      <h3>Book a 30-min working session</h3>
+      <p>Architecture review, technical roadmap, or direct engineering consultation.</p>
 
-      <ul class="booking-meta">
-        <li><Icon name="calendar" size={16} /> <strong>{site.booking.duration}</strong> video call (Google Meet / Zoom)</li>
-        <li><Icon name="check-circle" size={16} /> Architecture review, cloud delivery, or discovery</li>
-        <li><Icon name="activity" size={16} /> Clear next steps & actionable roadmap</li>
-        <li><Icon name="bolt" size={16} /> Live real-time availability via Calendly</li>
-      </ul>
+      <div class="booking-chips">
+        <span class="booking-chip"><Icon name="calendar" size={13} /> 30 min</span>
+        <span class="booking-chip"><Icon name="check-circle" size={13} /> Video Call</span>
+        <span class="booking-chip"><Icon name="bolt" size={13} /> Live availability</span>
+      </div>
 
       <div class="booking-actions">
-        <a class="button button--primary booking-cta" href={url} data-calendly-link target="_blank" rel="noopener noreferrer">
-          <Icon name="calendar" size={17} /> {site.booking.label} <Icon name="arrow-up-right" size={16} />
+        <a class="button button--primary booking-cta" href={url} target="_blank" rel="noopener noreferrer">
+          <Icon name="calendar" size={16} /> Open Calendly Schedule <Icon name="arrow-up-right" size={14} />
         </a>
       </div>
-      <p class="booking-footnote"><Icon name="shield-check" size={14} /> Direct 1-on-1 with Abu Sayaf · Select date on calendar to open schedule</p>
+      <p class="booking-footnote"><Icon name="shield-check" size={13} /> Click any date on the calendar to open real-time availability</p>
     </div>
 
     <div class="booking-calendar-wrapper">
-      <div class="month-calendar-card">
+      <div class="month-calendar-card" data-dynamic-calendar data-calendly-url={url}>
         <div class="month-cal-header">
-          <div class="month-cal-title">
-            <span class="month-cal-icon"><Icon name="calendar" size={16} /></span>
-            <strong>{fullMonthNames[currentMonthIndex]} {currentYear}</strong>
-          </div>
-          <span class="month-cal-badge">
-            <span class="month-cal-pulse"></span> Available
-          </span>
+          <a href={url} target="_blank" rel="noopener noreferrer" class="month-cal-title" title="Open schedule on Calendly">
+            <span class="month-cal-icon"><Icon name="calendar" size={14} /></span>
+            <strong data-cal-month-label>{fullMonthNames[currentMonthIndex]} {currentYear}</strong>
+          </a>
+          <a href={url} target="_blank" rel="noopener noreferrer" class="month-cal-badge" title="View live availability on Calendly">
+            <span class="month-cal-pulse"></span>
+            <span>Live Availability</span>
+            <Icon name="arrow-up-right" size={11} />
+          </a>
         </div>
 
         <!-- Weekday Labels -->
@@ -117,35 +109,33 @@ for (let day = 1; day <= daysInMonth; day++) {
           ))}
         </div>
 
-        <!-- Month Calendar Grid -->
-        <div class="month-cal-grid" role="grid" aria-label={`${fullMonthNames[currentMonthIndex]} ${currentYear} calendar`}>
+        <!-- Month Calendar Grid (dynamically updated on client) -->
+        <div class="month-cal-grid" data-cal-grid role="grid" aria-label="Monthly calendar preview">
           {calendarCells.map((cell) =>
             cell.blank ? (
               <span class="month-cal-day is-blank" aria-hidden="true" />
             ) : cell.isAvailable ? (
               <a
                 href={url}
-                data-calendly-link
                 target="_blank"
                 rel="noopener noreferrer"
                 class:list={[
                   'month-cal-day',
-                  'is-available',
+                  'is-active-day',
                   { 'is-today': cell.isToday },
                 ]}
-                title={`Book on Calendly for ${cell.dateLabel}`}
+                title={`View available times for ${cell.dateLabel} on Calendly`}
               >
                 <span class="cal-day-number">{cell.day}</span>
-                <span class="cal-avail-dot" aria-hidden="true" />
               </a>
             ) : (
               <span
                 class:list={[
                   'month-cal-day',
-                  { 'is-past': cell.isPast },
-                  { 'is-weekend': cell.isWeekend },
+                  'is-past',
                   { 'is-today': cell.isToday },
                 ]}
+                title={`${cell.dateLabel} (Past)`}
               >
                 <span class="cal-day-number">{cell.day}</span>
               </span>
@@ -156,13 +146,11 @@ for (let day = 1; day <= daysInMonth; day++) {
         <!-- Calendar Card Direct Action -->
         <div class="month-cal-footer">
           <div class="month-cal-legend">
-            <span class="legend-item"><span class="legend-dot is-avail"></span> Available</span>
             <span class="legend-item"><span class="legend-dot is-today"></span> Today</span>
+            <span class="legend-item"><span class="legend-dot is-avail"></span> Bookable on Calendly</span>
           </div>
-          <a class="button button--primary month-cal-book-btn" href={url} data-calendly-link target="_blank" rel="noopener noreferrer">
-            <Icon name="calendar" size={15} />
-            <span>Select Time on Calendly</span>
-            <Icon name="arrow-up-right" size={14} />
+          <a class="month-cal-direct-link" href={url} target="_blank" rel="noopener noreferrer">
+            <span>View Times ↗</span>
           </a>
         </div>
       </div>

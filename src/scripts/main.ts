@@ -234,6 +234,64 @@ function initCalendly(): void {
   });
 }
 
+function initDynamicCalendar(): void {
+  const container = document.querySelector<HTMLElement>('[data-dynamic-calendar]');
+  if (!container) return;
+  const calendlyUrl = container.dataset.calendlyUrl || 'https://calendly.com/sayaf';
+  const monthLabel = container.querySelector<HTMLElement>('[data-cal-month-label]');
+  const grid = container.querySelector<HTMLElement>('[data-cal-grid]');
+  if (!grid) return;
+
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const today = now.getDate();
+
+  const fullMonthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  if (monthLabel) {
+    monthLabel.textContent = `${fullMonthNames[month]} ${year}`;
+  }
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const totalDays = new Date(year, month + 1, 0).getDate();
+
+  grid.innerHTML = '';
+
+  for (let i = 0; i < firstDay; i++) {
+    const blank = document.createElement('span');
+    blank.className = 'month-cal-day is-blank';
+    blank.setAttribute('aria-hidden', 'true');
+    grid.appendChild(blank);
+  }
+
+  for (let d = 1; d <= totalDays; d++) {
+    const isPast = d < today;
+    const isToday = d === today;
+    const dateLabel = `${fullMonthNames[month]} ${d}, ${year}`;
+
+    if (isPast) {
+      const span = document.createElement('span');
+      span.className = `month-cal-day is-past${isToday ? ' is-today' : ''}`;
+      span.title = `${dateLabel} (Past)`;
+      span.innerHTML = `<span class="cal-day-number">${d}</span>`;
+      grid.appendChild(span);
+    } else {
+      const a = document.createElement('a');
+      a.className = `month-cal-day is-active-day${isToday ? ' is-today' : ''}`;
+      a.href = calendlyUrl;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.title = `View available times for ${dateLabel} on Calendly`;
+      a.innerHTML = `<span class="cal-day-number">${d}</span>`;
+      grid.appendChild(a);
+    }
+  }
+}
+
 function initHeroEntrance(): void {
   const hero = document.querySelector('.hero');
   if (!hero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -247,6 +305,7 @@ function init(): void {
   initTheme();
   initHeroEntrance();
   initCalendly();
+  initDynamicCalendar();
 
   const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
   const nav = document.querySelector<HTMLElement>('[data-main-nav]');

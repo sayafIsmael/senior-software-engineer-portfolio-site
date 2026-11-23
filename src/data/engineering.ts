@@ -1,29 +1,10 @@
+// Engineering data definitions
 export const capabilities = [
-  {
-    icon: 'layers',
-    title: 'System design & architecture',
-    summary: 'Clear boundaries, sound trade-offs, and scalable foundations.',
-  },
-  {
-    icon: 'shield-check',
-    title: 'Cybersecurity by design',
-    summary: 'Threat modeling, least privilege, secure reviews, and resilient delivery.',
-  },
-  {
-    icon: 'sparkles',
-    title: 'AI-assisted, engineer-verified',
-    summary: 'Move faster with AI, while keeping reviews, tests, and judgment human.',
-  },
-  {
-    icon: 'database',
-    title: 'Production ownership',
-    summary: 'Reliability, observability, incidents, recovery, and iteration.',
-  },
-  {
-    icon: 'layout-grid',
-    title: 'Product-minded engineering',
-    summary: 'Build the right system for the real problem — not just more code.',
-  },
+  { icon: 'layers', title: 'System design & architecture', summary: 'Clear boundaries, sound trade‑offs, and scalable foundations.' },
+  { icon: 'shield-check', title: 'Cybersecurity by design', summary: 'Threat modeling, least privilege, secure reviews, and resilient delivery.' },
+  { icon: 'sparkles', title: 'AI-assisted, engineer‑verified', summary: 'Move faster with AI, while keeping reviews, tests, and judgment human.' },
+  { icon: 'database', title: 'Production ownership', summary: 'Reliability, observability, incidents, recovery, and iteration.' },
+  { icon: 'layout-grid', title: 'Product‑minded engineering', summary: 'Build the right system for the real problem — not just more code.' },
 ] as const;
 
 export const architecture = [
@@ -36,62 +17,23 @@ export const architecture = [
 ] as const;
 
 export const principles = [
-  {
-    icon: 'layers',
-    title: 'Architecture before frameworks',
-    summary: 'Start with constraints, scale, and long-term maintainability.',
-    detail: 'I begin with the problem and its boundaries, then document the trade-offs. A modular monolith, distributed service, or managed platform is a decision — not a default.',
-  },
-  {
-    icon: 'shield-check',
-    title: 'Security from the first decision',
-    summary: 'Threat models, least privilege, data protection, and secure delivery.',
-    detail: 'I consider authentication, authorization, tenant isolation, secret management, dependency risk, and abuse cases in design and review — not as a last-minute checklist.',
-  },
-  {
-    icon: 'sparkles',
-    title: 'AI accelerates; engineers decide',
-    summary: 'Use AI deliberately, validate behavior, and own the result.',
-    detail: 'AI can help explore options, build bounded changes, write tests, and debug. I remain accountable for correctness, maintainability, data privacy, and the final technical judgment.',
-  },
-  {
-    icon: 'activity',
-    title: 'Design for the day after launch',
-    summary: 'Observe, recover, and improve the system in production.',
-    detail: 'Instrumentation, SLO-aware monitoring, safe deploys, incident learning, and cost control matter just as much as implementation.',
-  },
-  {
-    icon: 'code',
-    title: 'Tools follow the problem',
-    summary: 'Strong foundations; flexible implementation choices.',
-    detail: 'TypeScript, Next.js, NestJS, PostgreSQL, Redis, Docker, and CI/CD are familiar tools. I choose others when they solve the problem better.',
-  },
+  { icon: 'layers', title: 'Architecture before frameworks', summary: 'Start with constraints, scale, and long‑term maintainability.', detail: 'I begin with the problem and its boundaries, then document the trade‑offs. A modular monolith, distributed service, or managed platform is a decision — not a default.' },
+  { icon: 'shield-check', title: 'Security from the first decision', summary: 'Threat models, least privilege, data protection, and secure delivery.', detail: 'I consider authentication, authorization, tenant isolation, secret management, dependency risk, and abuse cases in design and review — not as a last‑minute checklist.' },
+  { icon: 'sparkles', title: 'AI accelerates; engineers decide', summary: 'Use AI deliberately, validate behavior, and own the result.', detail: 'AI can help explore options, build bounded changes, write tests, and debug. I remain accountable for correctness, maintainability, data privacy, and the final technical judgment.' },
+  { icon: 'activity', title: 'Design for the day after launch', summary: 'Observe, recover, and improve the system in production.', detail: 'Instrumentation, SLO‑aware monitoring, safe deploys, incident learning, and cost control matter just as much as implementation.' },
+  { icon: 'code', title: 'Tools follow the problem', summary: 'Strong foundations; flexible implementation choices.', detail: 'TypeScript, Next.js, NestJS, PostgreSQL, Redis, Docker, and CI/CD are familiar tools. I choose others when they solve the problem better.' },
 ] as const;
 
 export const process = [
   { icon: 'search', name: 'Clarify', detail: 'Align on constraints and outcomes.' },
-  { icon: 'layers', name: 'Architect', detail: 'Choose boundaries, data flows, and trade-offs.' },
+  { icon: 'layers', name: 'Architect', detail: 'Choose boundaries, data flows, and trade‑offs.' },
   { icon: 'code', name: 'Implement', detail: 'Build in small, reviewable increments.' },
   { icon: 'check-circle', name: 'Validate', detail: 'Test behavior, failure cases, and security.' },
-  { icon: 'activity', name: 'Operate', detail: 'Deploy safely and monitor real-world behavior.' },
+  { icon: 'activity', name: 'Operate', detail: 'Deploy safely and monitor real‑world behavior.' },
   { icon: 'trending-up', name: 'Evolve', detail: 'Improve using evidence and user feedback.' },
 ] as const;
 
 export const projects = [
-  {
-    number: '01',
-    title: 'Multi-tenant commerce platform',
-    status: 'Architecture & implementation',
-    description: 'Storefronts, orders, inventory, payments, and operations — designed as one coherent system.',
-    href: '/work/commerce-platform/',
-    diagram: 'commerce',
-  },
-  {
-    number: '02',
-    title: 'Automation & operational visibility',
-    status: 'System design exploration',
-    description: 'From incoming events to workflow alerts, acknowledgments, and operational visibility.',
-    href: '/work/automation-system/',
-    diagram: 'automation',
-  },
+  { number: '01', title: 'Easy Commerce — Multi‑tenant platform', status: 'Architecture & implementation', description: 'Unified order management, inventory, courier logistics, and social‑commerce storefronts for online merchants — built as one coherent, scalable system.', href: '/work/commerce-platform/', diagram: 'commerce' },
+  { number: '02', title: 'Inbox — Automation & visibility', status: 'Production system', description: 'Omnichannel inbox and workflow automation — centralising customer messages, order events, fraud checks, and courier workflows into one reliable, observable platform.', href: '/work/automation-system/', diagram: 'automation' },
 ] as const;
