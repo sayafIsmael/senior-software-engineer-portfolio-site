@@ -3,65 +3,174 @@ import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import { site } from '../data/site';
 import '../styles/global.css';
-interface Props { title?: string; description?: string; type?: 'website' | 'article'; }
-const { title = site.name + ' | Senior Software Engineer & Software Architect', description = site.description, type = 'website' } = Astro.props;
-const publicUrl = import.meta.env.PUBLIC_SITE_URL;
-const canonical = publicUrl ? new URL(Astro.url.pathname, publicUrl).href : undefined;
+
+interface Props {
+  title?: string;
+  description?: string;
+  type?: 'website' | 'article' | 'profile';
+  image?: string;
+  publishDate?: string;
+  keywords?: string[];
+}
+
+const {
+  title = `${site.name} — ${site.role} & System Architect | 10+ Years Experience`,
+  description = site.description,
+  type = 'website',
+  image = '/images/og-cover.png',
+  keywords = [
+    'Abu Sayaf',
+    'Senior Software Engineer',
+    'Software Architect',
+    'Full-Stack Engineer',
+    'Distributed Systems',
+    'Cloud Architecture',
+    'AI-Assisted Software Engineering',
+    'System Design',
+    'Cybersecurity',
+    'DevOps',
+    'Microservices',
+    'Node.js',
+    'TypeScript',
+    'Next.js',
+    'PostgreSQL',
+    'High-Performance Systems',
+  ],
+} = Astro.props;
+
+// Determine environment site URL, falling back gracefully to standard production domain or relative URLs
+const publicUrl = (import.meta.env.PUBLIC_SITE_URL || 'https://abusayaf.com').replace(/\/$/, '');
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonical = `${publicUrl}${pathname === '/' ? '' : pathname}/`;
+const ogImageUrl = image.startsWith('http') ? image : `${publicUrl}${image.startsWith('/') ? image : '/' + image}`;
+
 const sameAs = Object.values(site.links).filter((x) => /^https:\/\//.test(x));
+
 const schema = [
   {
+    '@context': 'https://schema.org',
     '@type': 'Person',
-    '@id': canonical ? `${publicUrl}/#person` : undefined,
+    '@id': `${publicUrl}/#person`,
     name: site.name,
+    givenName: 'Abu',
+    familyName: 'Sayaf',
     jobTitle: site.role,
     description: site.description,
-    ...(canonical ? { url: publicUrl } : {}),
-    ...(sameAs.length ? { sameAs } : {}),
-    knowsAbout: ['Software Architecture','Full-Stack Engineering','Distributed Systems','Software Security','Cloud Infrastructure','DevOps','AI-Assisted Software Engineering'],
+    url: publicUrl,
+    image: `${publicUrl}/images/portfolio-avatar.png`,
+    email: `mailto:${site.links.email}`,
+    sameAs,
+    knowsAbout: [
+      'Software Architecture',
+      'Distributed Systems Design',
+      'System Scalability & Performance',
+      'Full-Stack Software Engineering',
+      'Cloud Native Infrastructure (AWS, Docker, CI/CD)',
+      'Software Security & Cybersecurity by Design',
+      'AI-Integrated & AI-Assisted Engineering Workflows',
+      'Database Architecture (PostgreSQL, Redis)',
+      'Enterprise E-Commerce Platforms',
+      'Event-Driven Workflow Automation',
+    ],
+    worksFor: {
+      '@type': 'Organization',
+      name: 'Independent Engineering & Architecture Consultant',
+    },
+    alumniOf: 'Computer Science & Engineering',
+    knowsLanguage: ['en', 'bn'],
   },
   {
-    '@type': canonical && Astro.url.pathname !== '/' ? 'WebPage' : 'ProfilePage',
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${publicUrl}/#website`,
+    url: publicUrl,
+    name: `${site.name} — Portfolio & System Architecture`,
+    description: site.description,
+    publisher: { '@id': `${publicUrl}/#person` },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': type === 'article' ? 'TechArticle' : 'ProfilePage',
+    '@id': `${canonical}#webpage`,
+    url: canonical,
     name: title,
     description,
-    ...(canonical ? { url: canonical } : {}),
-    about: { '@id': canonical ? `${publicUrl}/#person` : undefined, name: site.name },
+    isPartOf: { '@id': `${publicUrl}/#website` },
+    about: { '@id': `${publicUrl}/#person` },
+    primaryImageOfPage: {
+      '@type': 'ImageObject',
+      url: ogImageUrl,
+    },
   },
 ];
-const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': schema }).replace(/</g, '\\u003c');
+
+const jsonLd = JSON.stringify(schema).replace(/</g, '\\u003c');
 ---
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" prefix="og: https://ogp.me/ns#">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="dark light" />
     <meta name="theme-color" content="#0e1410" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#f4f7f1" media="(prefers-color-scheme: light)" />
+
+    <!-- Primary Meta Tags -->
     <title>{title}</title>
+    <meta name="title" content={title} />
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywords.join(', ')} />
     <meta name="author" content={site.name} />
-    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="creator" content={site.name} />
+    <meta name="publisher" content={site.name} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="format-detection" content="telephone=no, address=no, email=no" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonical} />
+
+    <!-- Favicon & Touch Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Typography Preconnect -->
     <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet" />
-    {canonical && <link rel="canonical" href={canonical} />}
-    {publicUrl && <link rel="sitemap" type="application/xml" href={`${publicUrl}/sitemap-index.xml`} />}
+
+    <!-- Sitemap -->
+    <link rel="sitemap" type="application/xml" href={`${publicUrl}/sitemap-index.xml`} />
+
+    <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+    <meta property="og:site_name" content="Abu Sayaf — System Architect" />
     <meta property="og:type" content={type} />
-    <meta property="og:site_name" content="Abu Sayaf" />
+    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    {canonical && <meta property="og:url" content={canonical} />}
-    {publicUrl && <meta property="og:image" content={`${publicUrl}/images/og-cover.png`} />}
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:secure_url" content={ogImageUrl} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Abu Sayaf — Senior Software Engineer & System Architect Portfolio" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter / X Cards -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonical} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    {publicUrl && <meta name="twitter:image" content={`${publicUrl}/images/og-cover.png`} />}
-    <script type="application/ld+json" set:html={jsonLd}/>
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content="Abu Sayaf — Senior Software Engineer & System Architect Portfolio" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json" set:html={jsonLd} />
+
+    <!-- Theme Inline Script to prevent FOUC -->
     <script is:inline>
       (function () {
         try {
