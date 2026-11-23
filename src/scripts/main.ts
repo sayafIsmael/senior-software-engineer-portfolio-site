@@ -207,6 +207,113 @@ function initCalendly(): void {
     });
   });
 
+  const panel = document.querySelector<HTMLElement>('[data-booking-panel]');
+  if (panel) {
+    const calendarCard = panel.querySelector<HTMLElement>('[data-calendar-card]');
+    const embedShell = panel.querySelector<HTMLElement>('[data-booking-embed-shell]');
+    const embedFrame = panel.querySelector<HTMLIFrameElement>('[data-calendly-embed]');
+    const toggleButtons = panel.querySelectorAll<HTMLButtonElement>('[data-toggle-embed]');
+    const closeButton = panel.querySelector<HTMLButtonElement>('[data-close-embed]');
+    const summaryDisplay = panel.querySelector<HTMLElement>('[data-selected-slot-display]');
+    const loadingEl = panel.querySelector<HTMLElement>('[data-embed-loading]');
+    const toggleLabel = panel.querySelector<HTMLElement>('[data-toggle-embed-text]');
+
+    let selectedDate = '';
+    let selectedTime = '02:00 PM';
+
+    const dayCells = panel.querySelectorAll<HTMLButtonElement>('.cal-day-cell');
+    const slotButtons = panel.querySelectorAll<HTMLButtonElement>('.cal-slot-btn');
+
+    const updateDisplay = (): void => {
+      if (summaryDisplay) {
+        summaryDisplay.textContent = `${selectedDate || 'Upcoming date'} at ${selectedTime}`;
+      }
+    };
+
+    const initialDay = panel.querySelector<HTMLButtonElement>('.cal-day-cell.is-selected');
+    if (initialDay) {
+      selectedDate = initialDay.dataset.dateStr ?? '';
+    }
+    const initialSlot = panel.querySelector<HTMLButtonElement>('.cal-slot-btn.is-selected');
+    if (initialSlot) {
+      selectedTime = initialSlot.dataset.calSlot ?? '02:00 PM';
+    }
+    updateDisplay();
+
+    dayCells.forEach((cell) => {
+      cell.addEventListener('click', () => {
+        if (cell.disabled) return;
+        dayCells.forEach((c) => {
+          c.classList.remove('is-selected');
+          c.setAttribute('aria-pressed', 'false');
+        });
+        cell.classList.add('is-selected');
+        cell.setAttribute('aria-pressed', 'true');
+        selectedDate = cell.dataset.dateStr ?? '';
+        updateDisplay();
+      });
+    });
+
+    slotButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        slotButtons.forEach((b) => {
+          b.classList.remove('is-selected');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        btn.classList.add('is-selected');
+        btn.setAttribute('aria-pressed', 'true');
+        selectedTime = btn.dataset.calSlot ?? '02:00 PM';
+        updateDisplay();
+      });
+    });
+
+    const openEmbed = (): void => {
+      if (!embedShell) return;
+      if (embedFrame && (!embedFrame.src || embedFrame.src === window.location.href)) {
+        const targetSrc = embedFrame.dataset.src;
+        if (targetSrc) {
+          embedFrame.src = targetSrc;
+          embedFrame.onload = () => {
+            if (loadingEl) loadingEl.style.display = 'none';
+          };
+        }
+      }
+      embedShell.removeAttribute('hidden');
+      embedShell.classList.add('is-open');
+      if (calendarCard) calendarCard.style.display = 'none';
+      toggleButtons.forEach((btn) => {
+        btn.setAttribute('aria-expanded', 'true');
+      });
+      if (toggleLabel) toggleLabel.textContent = 'Hide live scheduler';
+    };
+
+    const closeEmbed = (): void => {
+      if (!embedShell) return;
+      embedShell.setAttribute('hidden', '');
+      embedShell.classList.remove('is-open');
+      if (calendarCard) calendarCard.style.display = 'flex';
+      toggleButtons.forEach((btn) => {
+        btn.setAttribute('aria-expanded', 'false');
+      });
+      if (toggleLabel) toggleLabel.textContent = 'Show live scheduler';
+    };
+
+    toggleButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const isOpen = embedShell && !embedShell.hasAttribute('hidden') && embedShell.classList.contains('is-open');
+        if (isOpen) {
+          closeEmbed();
+        } else {
+          openEmbed();
+        }
+      });
+    });
+
+    if (closeButton) {
+      closeButton.addEventListener('click', closeEmbed);
+    }
+  }
+
   const embeds = document.querySelectorAll<HTMLIFrameElement>('[data-calendly-embed]');
   const syncEmbedTheme = (): void => {
     const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
