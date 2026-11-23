@@ -747,7 +747,7 @@ a.video-card:hover .video-play { transform: translate(-50%, -50%) scale(1.06); }
 /* Booking / Calendly — Compact two‑column layout */
 .booking-panel {
   display: grid;
-  grid-template-columns: minmax(220px, .46fr) minmax(0, .54fr);
+  grid-template-columns: 1fr minmax(0, 220px);
   gap: 20px;
   align-items: start;
   margin: 12px 0 6px;
@@ -830,7 +830,7 @@ a.video-card:hover .video-play { transform: translate(-50%, -50%) scale(1.06); }
   display: flex;
   align-items: center;
   gap: 4px;
-  margin: 12px 0 0;
+  margin: 20px 0 0;
   line-height: 1.5;
 }
 .booking-footnote .icon { color: var(--green); flex-shrink: 0; }
