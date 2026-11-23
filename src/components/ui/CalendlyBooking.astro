@@ -10,47 +10,58 @@ interface Props {
 const { variant = 'panel', class: className = '' } = Astro.props;
 const url: string = site.links.calendly;
 const hasUrl = url.startsWith('https://');
-const embedSrc = hasUrl
-  ? `${url}${url.includes('?') ? '&' : '?'}hide_gdpr_banner=1&background_color=0c110e&text_color=f5f7f4&primary_color=62c275`
-  : '';
 
-// Generate 14 days of realistic schedule availability starting from today
+// Accurate month calendar calculation
 const now = new Date();
-const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const fullMonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const weekdayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-const scheduleDays = Array.from({ length: 14 }).map((_, i) => {
-  const d = new Date(now);
-  d.setDate(now.getDate() + i);
-  const dayOfWeek = d.getDay();
-  const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-  const isToday = i === 0;
-  // Available on weekdays, and selected on first available weekday
-  const available = !isWeekend;
-  return {
-    date: d.getDate(),
-    month: monthNames[d.getMonth()],
-    monthIndex: d.getMonth(),
-    year: d.getFullYear(),
-    dayName: weekdayNames[dayOfWeek],
-    isWeekend,
-    isToday,
-    available,
-  };
-});
-
-// Pick the first available day as default selected
-const firstAvailableIndex = scheduleDays.findIndex((d) => d.available);
-const defaultSelectedIndex = firstAvailableIndex >= 0 ? firstAvailableIndex : 0;
-const currentDisplayMonth = `${fullMonthNames[now.getMonth()]} ${now.getFullYear()}`;
-
-const timeSlots = [
-  { time: '02:00 PM', label: '14:00 UTC+6' },
-  { time: '03:30 PM', label: '15:30 UTC+6' },
-  { time: '05:00 PM', label: '17:00 UTC+6' },
-  { time: '07:30 PM', label: '19:30 UTC+6' },
+const currentYear = now.getFullYear();
+const currentMonthIndex = now.getMonth();
+const fullMonthNames = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
 ];
+const weekdayShort = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+
+// 1st day of month (0 = Sun, 1 = Mon, ..., 6 = Sat)
+const firstDayOfWeek = new Date(currentYear, currentMonthIndex, 1).getDay();
+// Total days in month
+const daysInMonth = new Date(currentYear, currentMonthIndex + 1, 0).getDate();
+const todayDate = now.getDate();
+
+interface CalendarCell {
+  blank: boolean;
+  day?: number;
+  isPast?: boolean;
+  isToday?: boolean;
+  isWeekend?: boolean;
+  isAvailable?: boolean;
+  dateLabel?: string;
+}
+
+const calendarCells: CalendarCell[] = [];
+
+// Leading empty cells
+for (let i = 0; i < firstDayOfWeek; i++) {
+  calendarCells.push({ blank: true });
+}
+
+// Actual days of month
+for (let day = 1; day <= daysInMonth; day++) {
+  const d = new Date(currentYear, currentMonthIndex, day);
+  const dow = d.getDay();
+  const isWeekend = dow === 0 || dow === 6;
+  const isPast = day < todayDate;
+  const isToday = day === todayDate;
+  const isAvailable = !isPast && !isWeekend;
+  calendarCells.push({
+    blank: false,
+    day,
+    isPast,
+    isToday,
+    isWeekend,
+    isAvailable,
+    dateLabel: `${fullMonthNames[currentMonthIndex]} ${day}, ${currentYear}`,
+  });
+}
 ---
 {variant === 'inline' ? (
   <a class:list={['button', 'button--primary', 'booking-cta', className]} href={hasUrl ? url : '#book'} data-calendly-link={hasUrl ? true : undefined} target={hasUrl ? '_blank' : undefined} rel={hasUrl ? 'noopener noreferrer' : undefined}>
@@ -67,7 +78,7 @@ const timeSlots = [
     <div class="booking-copy">
       <div class="booking-badge">
         <span class="booking-status-indicator"></span>
-        <span>Accepting new sessions</span>
+        <span>Open for architecture & consulting</span>
       </div>
       <h3>Book a focused working session</h3>
       <p>{site.booking.blurb}</p>
@@ -75,121 +86,84 @@ const timeSlots = [
       <ul class="booking-meta">
         <li><Icon name="calendar" size={16} /> <strong>{site.booking.duration}</strong> video call (Google Meet / Zoom)</li>
         <li><Icon name="check-circle" size={16} /> Architecture review, cloud delivery, or discovery</li>
-        <li><Icon name="activity" size={16} /> Actionable roadmap & clear next steps</li>
-        <li><Icon name="bolt" size={16} /> Fast confirmation within 24 hours</li>
+        <li><Icon name="activity" size={16} /> Clear next steps & actionable roadmap</li>
+        <li><Icon name="bolt" size={16} /> Live real-time availability via Calendly</li>
       </ul>
 
       <div class="booking-actions">
         <a class="button button--primary booking-cta" href={url} data-calendly-link target="_blank" rel="noopener noreferrer">
-          <Icon name="calendar" size={17} /> <span data-booking-cta-label>{site.booking.label}</span> <Icon name="arrow-up-right" size={16} />
+          <Icon name="calendar" size={17} /> {site.booking.label} <Icon name="arrow-up-right" size={16} />
         </a>
-        <button type="button" class="button button--ghost booking-toggle-embed" data-toggle-embed aria-expanded="false">
-          <Icon name="eye" size={16} /> <span data-toggle-embed-text>Show live scheduler</span>
-        </button>
       </div>
-      <p class="booking-footnote"><Icon name="shield-check" size={14} /> Direct 1-on-1 with Abu Sayaf · Flexible timezone options</p>
+      <p class="booking-footnote"><Icon name="shield-check" size={14} /> Direct 1-on-1 with Abu Sayaf · Select date on calendar to open schedule</p>
     </div>
 
-    <div class="booking-schedule-area">
-      <!-- High-fidelity custom calendar design -->
-      <div class="calendar-card" data-calendar-card>
-        <div class="calendar-card-header">
-          <div class="calendar-card-title">
-            <span class="calendar-icon-wrap"><Icon name="calendar" size={16} /></span>
-            <div>
-              <strong>Schedule Availability</strong>
-              <small class="calendar-month-subtitle">{currentDisplayMonth}</small>
-            </div>
+    <div class="booking-calendar-wrapper">
+      <div class="month-calendar-card">
+        <div class="month-cal-header">
+          <div class="month-cal-title">
+            <span class="month-cal-icon"><Icon name="calendar" size={16} /></span>
+            <strong>{fullMonthNames[currentMonthIndex]} {currentYear}</strong>
           </div>
-          <span class="calendar-status-chip">
-            <span class="calendar-pulse-dot"></span> Available
+          <span class="month-cal-badge">
+            <span class="month-cal-pulse"></span> Available
           </span>
         </div>
 
-        <!-- 14-day scrollable / responsive date picker -->
-        <div class="calendar-days-strip" role="group" aria-label="Select an available date">
-          {scheduleDays.map((day, idx) => (
-            <button
-              type="button"
-              class:list={[
-                'cal-day-cell',
-                { 'is-selected': idx === defaultSelectedIndex },
-                { 'is-available': day.available },
-                { 'is-weekend': day.isWeekend },
-                { 'is-today': day.isToday },
-              ]}
-              data-cal-day={idx}
-              data-date-str={`${day.month} ${day.date}, ${day.year}`}
-              disabled={!day.available}
-              aria-pressed={idx === defaultSelectedIndex ? 'true' : 'false'}
-              title={day.available ? `Available on ${day.dayName}, ${day.month} ${day.date}` : `Unavailable on ${day.dayName}`}
-            >
-              <span class="cal-day-name">{day.dayName}</span>
-              <span class="cal-day-num">{day.date}</span>
-              <span class="cal-day-indicator"></span>
-            </button>
+        <!-- Weekday Labels -->
+        <div class="month-cal-weekdays">
+          {weekdayShort.map((w) => (
+            <span class="month-cal-weekday">{w}</span>
           ))}
         </div>
 
-        <!-- Available time slots -->
-        <div class="calendar-slots-section">
-          <div class="calendar-slots-header">
-            <span class="calendar-slots-label">Select preferred window:</span>
-            <span class="calendar-timezone-badge"><Icon name="activity" size={12} /> UTC+6 (Flexible)</span>
-          </div>
-          <div class="calendar-slots-grid" role="group" aria-label="Select a time slot">
-            {timeSlots.map((slot, idx) => (
-              <button
-                type="button"
-                class:list={['cal-slot-btn', { 'is-selected': idx === 0 }]}
-                data-cal-slot={slot.time}
-                aria-pressed={idx === 0 ? 'true' : 'false'}
+        <!-- Month Calendar Grid -->
+        <div class="month-cal-grid" role="grid" aria-label={`${fullMonthNames[currentMonthIndex]} ${currentYear} calendar`}>
+          {calendarCells.map((cell) =>
+            cell.blank ? (
+              <span class="month-cal-day is-blank" aria-hidden="true" />
+            ) : cell.isAvailable ? (
+              <a
+                href={url}
+                data-calendly-link
+                target="_blank"
+                rel="noopener noreferrer"
+                class:list={[
+                  'month-cal-day',
+                  'is-available',
+                  { 'is-today': cell.isToday },
+                ]}
+                title={`Book on Calendly for ${cell.dateLabel}`}
               >
-                <strong>{slot.time}</strong>
-                <small>{slot.label}</small>
-              </button>
-            ))}
-          </div>
+                <span class="cal-day-number">{cell.day}</span>
+                <span class="cal-avail-dot" aria-hidden="true" />
+              </a>
+            ) : (
+              <span
+                class:list={[
+                  'month-cal-day',
+                  { 'is-past': cell.isPast },
+                  { 'is-weekend': cell.isWeekend },
+                  { 'is-today': cell.isToday },
+                ]}
+              >
+                <span class="cal-day-number">{cell.day}</span>
+              </span>
+            )
+          )}
         </div>
 
-        <!-- Calendar footer with selected confirmation & action -->
-        <div class="calendar-card-footer">
-          <div class="calendar-selection-summary">
-            <span class="selection-indicator-icon"><Icon name="check-circle" size={14} /></span>
-            <span class="selection-text">
-              Selected: <strong data-selected-slot-display>{scheduleDays[defaultSelectedIndex]?.month} {scheduleDays[defaultSelectedIndex]?.date} at 02:00 PM</strong>
-            </span>
+        <!-- Calendar Card Direct Action -->
+        <div class="month-cal-footer">
+          <div class="month-cal-legend">
+            <span class="legend-item"><span class="legend-dot is-avail"></span> Available</span>
+            <span class="legend-item"><span class="legend-dot is-today"></span> Today</span>
           </div>
-          <a class="button button--primary calendar-confirm-btn" href={url} data-calendly-link target="_blank" rel="noopener noreferrer">
-            <span>Confirm on Calendly</span>
-            <Icon name="arrow-up-right" size={15} />
+          <a class="button button--primary month-cal-book-btn" href={url} data-calendly-link target="_blank" rel="noopener noreferrer">
+            <Icon name="calendar" size={15} />
+            <span>Select Time on Calendly</span>
+            <Icon name="arrow-up-right" size={14} />
           </a>
-        </div>
-      </div>
-
-      <!-- Live Calendly embed shell (hidden by default, loaded only on demand) -->
-      <div class="booking-embed-shell" data-booking-embed-shell hidden>
-        <div class="embed-header">
-          <div class="embed-header-title">
-            <Icon name="calendar" size={16} />
-            <span>Calendly Live Scheduler</span>
-          </div>
-          <button type="button" class="embed-close-btn" data-close-embed aria-label="Close live scheduler">
-            <Icon name="close" size={15} /> <span>Back to overview</span>
-          </button>
-        </div>
-        <div class="embed-frame-wrapper">
-          <div class="embed-loading" data-embed-loading>
-            <span class="embed-spinner"></span>
-            <span>Connecting to Calendly...</span>
-          </div>
-          <iframe
-            class="booking-embed"
-            data-calendly-embed
-            data-src={embedSrc}
-            title="Schedule a meeting with Abu Sayaf on Calendly"
-            loading="lazy"
-          ></iframe>
         </div>
       </div>
     </div>

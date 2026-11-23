@@ -18,6 +18,10 @@ const required = [
   'public/images/avatar-placeholder.svg',
   'public/images/og-cover.png',
   'public/icons.svg',
+  'public/favicon.svg',
+  'public/favicon.ico',
+  'public/apple-touch-icon.png',
+  'public/site.webmanifest',
 ];
 for (const file of required) {
   if (!fs.existsSync(path.join(root, file))) throw new Error(`Missing: ${file}`);
