@@ -19,7 +19,16 @@ export const site = {
     email: '',        // e.g. hello@your-domain.com
     github: '',       // e.g. https://github.com/your-handle
     linkedin: '',     // e.g. https://www.linkedin.com/in/your-handle/
-    upwork: '',       // paste your real Upwork profile URL
+    upwork: 'https://www.upwork.com/freelancers/~016c0b856d16bae9fa',       // paste your real Upwork profile URL
+    youtube: '',      // paste your real YouTube channel URL
+    calendly: 'https://calendly.com/sayaf',
+    automation: 'https://inbox.bajutech.com/',
+    ecommerce: 'https://commerce.bajutech.com/',
+
+    email: '',        // e.g. hello@your-domain.com
+    github: '',       // e.g. https://github.com/your-handle
+    linkedin: '',     // e.g. https://www.linkedin.com/in/your-handle/
+    upwork: 'https://www.upwork.com/freelancers/~016c0b856d16bae9fa',       // paste your real Upwork profile URL
     youtube: '',      // paste your real YouTube channel URL
     calendly: 'https://calendly.com/sayaf',
   },
