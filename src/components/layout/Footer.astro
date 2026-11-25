@@ -1,6 +1,7 @@
 ---
 import { site } from '../../data/site';
 import SocialLink from '../ui/SocialLink.astro';
+import Icon from '../ui/Icon.astro';
 import CalendlyBooking from '../ui/CalendlyBooking.astro';
 ---
 <footer id="contact" class="footer container section-rule">
@@ -9,6 +10,9 @@ import CalendlyBooking from '../ui/CalendlyBooking.astro';
       <p class="eyebrow"><span class="eyebrow-mark"></span> Let's talk</p>
       <h2>Have a difficult system to build?</h2>
       <p>Available for high-impact software architecture, secure engineering, and production-focused work.</p>
+      <a class="text-link footer-phone" href={site.phone.href} aria-label={`Call ${site.name} at ${site.phone.label}`}>
+        <Icon name="phone" size={16} /> {site.phone.label}
+      </a>
     </div>
 
     <div class="footer-actions">

@@ -35,5 +35,5 @@ export const process = [
 
 export const projects = [
   { number: '01', title: 'AI-Integrated E-Commerce Platform', status: 'Architecture & implementation', description: 'Next-gen multi-tenant commerce architecture orchestrating storefronts, real-time inventory, intelligent routing, and automated courier logistics into one high-throughput engine.', href: '/work/commerce-platform/', diagram: 'commerce' },
-  { number: '02', title: 'AI-Integrated Chatbot Automation tools & Intelligence Hub', status: 'Production system', description: 'Omnichannel intelligence platform transforming messy customer conversations, incoming order spikes, and fraud detection into proactive, observable, self-healing automated workflows.', href: '/work/automation-system/', diagram: 'automation' },
+  { number: '02', title: 'AI-Integrated Chatbot Automation Tools & Intelligence Hub', status: 'Production system', description: 'An AI-powered inbox that brings customer chats together, answers common questions, captures orders, and flags risky deliveries for review.', href: '/work/automation-system/', diagram: 'automation' },
 ] as const;

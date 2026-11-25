@@ -7,6 +7,10 @@ export const site = {
   name: 'Abu Sayaf',
   role: 'Senior Software Engineer',
   experienceYears: 10,
+  phone: {
+    label: '+880-1332106696',
+    href: 'tel:+8801332106696',
+  },
   avatar: {
     src: '/images/portfolio-avatar.png',
     alt: 'Portrait of Abu Sayaf, Senior Software Engineer',

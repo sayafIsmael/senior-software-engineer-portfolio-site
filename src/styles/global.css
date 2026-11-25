@@ -30,18 +30,18 @@
   --ink: #141916;
   --muted: #4a554d;
   --soft-muted: #68746b;
-  --green: #1c6d2e;
-  --dark-green: #145124;
-  --green-2: #3c9650;
-  --mint: #e8f2e2;
-  --mint-strong: #d8ebcf;
+  --green: #137135;
+  --dark-green: #075727;
+  --green-2: #21a74e;
+  --mint: #e0f8e7;
+  --mint-strong: #c6efd2;
   --border: #cfd9cb;
   --border-strong: #9fb39a;
   --surface: #fbfcf9;
   --surface-low: #eef3ea;
   --surface-hover: #f3faf0;
   --shadow: 0 10px 28px rgba(20, 55, 28, .07);
-  --focus: 3px solid #239345;
+  --focus: 3px solid #137135;
   --nav-link: #243028;
   --hero-intro: #3d473f;
   --orbit-ink: #243227;
@@ -66,18 +66,18 @@
   --ink: #f5f7f4;
   --muted: #c2cdc4;
   --soft-muted: #9aa79d;
-  --green: #62c275;
-  --dark-green: #8adb98;
-  --green-2: #4eaa61;
-  --mint: #17231b;
-  --mint-strong: #1f2d24;
+  --green: #92f5aa;
+  --dark-green: #bbffca;
+  --green-2: #72e890;
+  --mint: #17291e;
+  --mint-strong: #21402b;
   --border: #27332b;
   --border-strong: #3b4c41;
   --surface: #141b16;
   --surface-low: #101611;
   --surface-hover: #1a231d;
   --shadow: 0 14px 36px rgba(0, 0, 0, .38);
-  --focus: 3px solid #62c275;
+  --focus: 3px solid #92f5aa;
   --nav-link: #e4ebe5;
   --hero-intro: #d0d9d2;
   --orbit-ink: #eef3ef;
@@ -92,7 +92,7 @@
   --selection-ink: #f5f7f4;
   --glow: rgba(70, 140, 90, .16);
   --booking-frame: #182119;
-  --button-ink: #ffffff;
+  --button-ink: #0c2113;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -595,9 +595,17 @@ html.is-ready .hero-architecture {
 .capability-card h3 { font-size: .95rem; font-weight: 600; margin: 0; max-width: 11em; line-height: 1.3; }
 
 /* Selected systems */
-.project-list { border-bottom: 1px solid var(--border); }
-.project-row { display: grid; grid-template-columns: minmax(0, .87fr) minmax(0, 1.13fr); gap: 31px; padding: 22px 0 24px; min-height: 181px; align-items: center; }
-.project-row + .project-row { border-top: 1px solid var(--border); }
+.project-list { display: grid; gap: 24px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+.project-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; min-width: 0; }
+.project-row + .project-row { border-top: 1px solid var(--border); padding-top: 24px; }
+@media (min-width: 56rem) {
+  .project-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(20px, 3vw, 40px); row-gap: 14px; }
+  .project-row { grid-row: span 7; grid-template-rows: subgrid; }
+  .project-row > .project-copy { display: grid; grid-row: span 3; grid-template-rows: subgrid; gap: 4px; }
+  .project-row .project-copy h3, .project-row .project-copy > p { margin-bottom: 0; }
+  .project-row > .showcase { grid-row: span 4; grid-template-rows: subgrid; }
+  .project-row + .project-row { border-top: 0; padding-top: 0; }
+}
 .project-title-line { display: flex; align-items: first baseline; gap: 15px; }
 .project-number { font-size: 1.15rem; font-weight: 700; color: var(--green); white-space: nowrap; }
 .project-number span { padding-left: 4px; }
@@ -1056,6 +1064,7 @@ a.video-card:hover .video-play { transform: translate(-50%, -50%) scale(1.06); }
 .footer h2 { font-size: clamp(1.65rem, 3vw, 2.35rem); margin-bottom: 8px; }
 .footer p:not(.eyebrow) { color: var(--muted); font-size: .95rem; margin: 0; max-width: 48ch; }
 
+.footer-phone { margin-top: 10px; }
 .footer-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; flex-shrink: 0; }
 .footer h2 { font-size: clamp(1.65rem, 3vw, 2.35rem); margin-bottom: 8px; }
 .footer p:not(.eyebrow) { color: var(--muted); font-size: .95rem; margin: 0; max-width: 46ch; }
@@ -1102,7 +1111,6 @@ a.video-card:hover .video-play { transform: translate(-50%, -50%) scale(1.06); }
   .orbit-center { width: 84px; height: 76px; }
   .capability-card h3 { font-size: .92rem; }
   .capability-card p { font-size: .84rem; }
-  .project-row { gap: 21px; }
   .project-visual { padding-left: 14px; }
   .diagram-node { min-width: 75px; padding: 8px 7px; }
   .diagram-stack .diagram-node { width: 110px; }
@@ -1122,7 +1130,6 @@ a.video-card:hover .video-play { transform: translate(-50%, -50%) scale(1.06); }
   .experience-amount { border-right: none; }
   .experience-banner p { padding-left: 24px; }
   .capability-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
-  .project-row { grid-template-columns: 1fr; gap: 15px; padding: 23px 0; }
   .project-visual { border-left: 0; padding-left: 0; max-width: 530px; margin: 0 auto; width: 100%; }
   .architecture-steps { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 11px; }
   .architecture-arrow { display: none; }
