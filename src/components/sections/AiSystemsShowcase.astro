@@ -1,0 +1,33 @@
+---
+const providers = ['ChatGPT', 'Gemini', 'Claude', 'DeepSeek'];
+---
+<section id="ai-systems" class="section-rule" aria-labelledby="ai-systems-title">
+  <div class="copy">
+    <h2 id="ai-systems-title">AI for the way your business works</h2>
+    <p>I connect AI to the tools teams use every day. In <a href="/work/automation-system/">Easy Inbox</a>, it answers questions, checks stock, and takes orders.</p>
+  </div>
+  <div class="providers" tabindex="0" role="group" aria-label="Supported AI providers">
+    <div class="track">
+      {[false, true].map((duplicate) => (
+        <ul aria-hidden={duplicate || undefined}>
+          {providers.map((name) => <li><img src={`/images/ai-models/${name.toLowerCase()}.svg`} width="25" height="25" alt="" />{name}</li>)}
+        </ul>
+      ))}
+    </div>
+  </div>
+</section>
+<style>
+  section { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); align-items:center; gap:clamp(1rem,3vw,2.5rem); padding-block:clamp(1.25rem,3vw,2rem); }
+  h2 { margin:0; font-size:clamp(1.35rem,2.4vw,1.9rem); line-height:1.15; }
+  p { margin:.45rem 0 0; max-width:53ch; color:var(--muted); line-height:1.5; }
+  a { color:var(--green); font-weight:650; }
+  .providers { width:100%; max-width:25rem; overflow:hidden; min-width:0; }
+  .track { display:flex; width:max-content; animation:slide 20s linear infinite; }
+  ul { display:flex; gap:.5rem; margin:0; padding:0 .5rem 0 0; list-style:none; }
+  li { display:flex; align-items:center; gap:.45rem; padding:.45rem .65rem; border:1px solid var(--border); border-radius:5px; background:var(--surface); font-size:.875rem; font-weight:650; }
+  img { box-sizing:content-box; background:white; padding:3px; border-radius:4px; }
+  .providers:is(:hover,:focus) .track { animation-play-state:paused; }
+  @keyframes slide { to { transform:translateX(-50%); } }
+  @media(max-width:700px) { section { grid-template-columns:1fr; } }
+  @media(prefers-reduced-motion:reduce) { .track { animation:none; width:auto; } ul { flex-wrap:wrap; } ul[aria-hidden="true"] { display:none; } }
+</style>

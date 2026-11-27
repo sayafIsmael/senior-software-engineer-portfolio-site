@@ -1,0 +1,200 @@
+---
+import Icon from './PreviewIcon.astro';
+import ProductThumbnail from './ProductThumbnail.astro';
+
+const channels = ['Messenger', 'Instagram', 'WhatsApp'] as const;
+const threads = [
+  { name: 'Nusrat Jahan', initials: 'NJ', channel: 'Messenger', question: 'Is this T-shirt in stock?', reply: 'Yes! The black T-shirt costs ৳1,230. Would you like to order one?' },
+  { name: 'Tamim Hasan', initials: 'TH', channel: 'WhatsApp', question: 'Can I pay on delivery?', reply: 'Yes, cash on delivery is available. Would you like me to confirm your order?' },
+  { name: 'Farzana Akter', initials: 'FA', channel: 'Instagram', question: 'Is the black tee available in large?', reply: 'Yes, size L is in stock. I can help you order one here.' },
+] as const;
+const channelSrc = (name: string) => `/images/integrations/${name.toLowerCase()}.svg`;
+---
+<div class="inbox-workspace" data-live-inbox data-stage="0" role="group" aria-label="Interactive Easy Inbox demo">
+  <header class="workspace-bar">
+    <strong class="workspace-brand"><img src="/images/integrations/easy-inbox.svg" alt="" width="24" height="24" /> Easy Inbox</strong>
+    <span class="workspace-tab">Conversations</span>
+    <div class="workspace-channels">
+      {channels.map((channel) => <img src={channelSrc(channel)} alt={channel} width="16" height="16" />)}
+    </div>
+    <button class="workspace-play" type="button" data-inbox-play aria-label="Pause demo"><span data-pause><Icon name="lucide:pause" /></span><span data-play><Icon name="lucide:play" /></span></button>
+  </header>
+  <div class="workspace-body">
+    <aside class="workspace-rail" aria-hidden="true"><Icon name="lucide:inbox" /><Icon name="lucide:message-circle" /><Icon name="lucide:git-branch" /></aside>
+    <div class="workspace-list" role="group" aria-label="Sample conversations">
+      <div class="workspace-list-label">All channels</div>
+      {threads.map(({ name, initials, channel, question }, index) => (
+        <button type="button" data-inbox-thread={index} aria-pressed={index === 0}>
+          <span class={`workspace-avatar avatar-${index}`} aria-hidden="true">{initials}</span>
+          <span class="workspace-person"><strong>{name}</strong><small>{question}</small></span>
+          <img src={channelSrc(channel)} alt={channel} width="13" height="13" />
+        </button>
+      ))}
+    </div>
+    <div class="workspace-chat">
+      {threads.map(({ name, initials, channel, question, reply }, index) => (
+        <article class="workspace-thread" data-inbox-scene={index} aria-hidden={index !== 0}>
+          <header><span class={`workspace-avatar avatar-${index}`} aria-hidden="true">{initials}</span><div><strong>{name}</strong><small><span>{channel}</span> · <span>Sample conversation</span></small></div></header>
+          <div class="workspace-messages">
+            <p class="workspace-incoming"><span>{question}</span><small>10:24</small></p>
+            <div class="workspace-reply">
+              <p class="workspace-outgoing" data-inbox-reveal="2"><strong><Icon name="lucide:bot" /> <span>AI reply</span></strong><span>{reply}</span><small>Sent</small></p>
+              <span class="workspace-typing" data-inbox-typing aria-label="AI is typing"><i></i><i></i><i></i></span>
+            </div>
+            <div class="workspace-product" data-inbox-reveal="2"><ProductThumbnail /><div><strong>Premium T-Shirt</strong><small><span>Black</span> · <span>৳1,230</span></small></div><button type="button" data-inbox-order>Order</button></div>
+            <p class="workspace-incoming" data-inbox-reveal="3"><span>One, please. Cash on delivery.</span><small>10:25</small></p>
+            <div class="workspace-order">
+              <p data-inbox-confirming>Confirming delivery and payment details…</p>
+              <p data-inbox-reveal="5"><Icon name="lucide:check" /> <span>Order #EI-1042 created · ৳1,290 due on delivery</span></p>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+
+  const durations = [950, 1300, 2300, 1450, 1100, 4200];
+  document.querySelectorAll<HTMLElement>('[data-live-inbox]').forEach((demo) => {
+    const threads = [...demo.querySelectorAll<HTMLButtonElement>('[data-inbox-thread]')];
+    const scenes = [...demo.querySelectorAll<HTMLElement>('[data-inbox-scene]')];
+    const orderButtons = [...demo.querySelectorAll<HTMLButtonElement>('[data-inbox-order]')];
+    const play = demo.querySelector<HTMLButtonElement>('[data-inbox-play]')!;
+    const motion = matchMedia('(prefers-reduced-motion: reduce)');
+    let index = 0;
+    let stage = motion.matches ? 5 : 0;
+    let paused = false;
+    let inView = false;
+    let timer: number | undefined;
+    const paint = () => {
+      demo.dataset.stage = String(stage);
+      play.hidden = motion.matches;
+      play.dataset.paused = String(paused);
+      play.setAttribute('aria-label', paused ? 'Play demo' : 'Pause demo');
+      threads.forEach((button, cursor) => button.setAttribute('aria-pressed', String(cursor === index)));
+      const order = stage === 5 ? 'Ordered' : stage >= 3 ? 'Confirm' : 'Order';
+      orderButtons.forEach((button, cursor) => {
+        button.textContent = order;
+        button.disabled = cursor !== index || stage < 2 || stage === 5;
+      });
+      scenes.forEach((scene, cursor) => {
+        scene.setAttribute('aria-hidden', String(cursor !== index));
+        scene.querySelectorAll<HTMLElement>('[data-inbox-reveal]').forEach((item) => {
+          item.dataset.revealed = String(stage >= Number(item.dataset.inboxReveal));
+        });
+      });
+    };
+    const schedule = () => {
+      clearTimeout(timer);
+      if (!inView || paused || motion.matches || document.hidden) return;
+      timer = window.setTimeout(() => {
+        if (stage === durations.length - 1) { index = (index + 1) % threads.length; stage = 0; }
+        else stage += 1;
+        paint();
+        schedule();
+      }, durations[stage]);
+    };
+    threads.forEach((button, cursor) => button.addEventListener('click', () => {
+      index = cursor;
+      stage = motion.matches ? durations.length - 1 : 0;
+      paused = false;
+      paint();
+      schedule();
+    }));
+    play.addEventListener('click', () => { paused = !paused; paint(); schedule(); });
+    orderButtons.forEach((button) => button.addEventListener('click', () => {
+      paused = true;
+      stage = stage < 3 ? 3 : 5;
+      paint();
+      schedule();
+    }));
+    document.addEventListener('visibilitychange', schedule);
+    motion.addEventListener('change', () => { if (motion.matches) stage = durations.length - 1; paint(); schedule(); });
+    const observer = new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; schedule(); });
+    observer.observe(demo);
+    paint();
+  });
+</script>
+
+<style>
+  .inbox-workspace { --workspace-line: #dbe5f3; container: inbox-workspace / inline-size; min-width: 0; color: #152640; background: white; font: 400 .75rem/1.4 system-ui, sans-serif; }
+  .inbox-workspace button { font: inherit; }
+  .workspace-bar, .workspace-thread > header { display: flex; align-items: center; gap: .45rem; padding: .38rem .55rem; }
+  .workspace-bar { flex-wrap: wrap; background: #f7faff; border-bottom: 1px solid var(--workspace-line); }
+  .workspace-brand { display: inline-flex; align-items: center; gap: .42rem; white-space: nowrap; font-size: .84rem; font-weight: 800; }
+  .workspace-tab { padding: .15rem .4rem; border-radius: 4px; background: #e7f1ff; color: #0756cf; font-size: .69rem; font-weight: 700; }
+  .workspace-channels { display: flex; align-items: center; gap: .35rem; margin-inline-start: auto; }
+  .workspace-channels img { width: 1rem; height: 1rem; }
+  .workspace-body { display: grid; grid-template-columns: 1.7rem minmax(0,.76fr) minmax(0,1.48fr); }
+  .workspace-rail { display: flex; flex-direction: column; align-items: center; gap: .7rem; padding-block: .6rem; border-inline-end: 1px solid var(--workspace-line); background: #f6f9fe; color: #526581; }
+  .workspace-rail svg { width: .84rem; height: .84rem; }
+  .workspace-rail svg:nth-child(2) { color: #0866ff; }
+  .workspace-list { min-width: 0; padding: .38rem; background: #fbfcff; border-inline-end: 1px solid var(--workspace-line); }
+  .workspace-list-label { margin-bottom: .25rem; padding: .25rem .35rem; border-radius: 4px; background: #eef3fa; font-weight: 750; }
+  .workspace-list button { width: 100%; display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: .26rem; padding: .38rem .23rem; border: 1px solid transparent; border-radius: 4px; text-align: left; cursor: pointer; }
+  .workspace-list button:hover, .workspace-list button[aria-pressed="true"] { background: #eaf2ff; border-color: #d5e5ff; }
+  .workspace-list button:focus-visible, .workspace-play:focus-visible { outline: 2px solid #0866ff; outline-offset: 1px; }
+  .workspace-list button > img { width: .8rem; height: .8rem; }
+  .workspace-person { min-width: 0; }
+  .workspace-person :is(strong,small) { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .workspace-avatar { display: grid; place-items: center; flex: none; width: 1.4rem; height: 1.4rem; border-radius: 50%; background: #efe5ff; color: #68459b; font-size: .62rem; font-weight: 800; }
+  .avatar-1 { background: #dbf3f2; color: #1e666e; }
+  .avatar-2 { background: #ffebf2; color: #963b62; }
+  .workspace-chat { display: grid; min-width: 0; }
+  .workspace-thread { grid-area: 1 / 1; min-width: 0; }
+  .workspace-thread[aria-hidden="true"] { visibility: hidden; }
+  .workspace-thread > header { border-bottom: 1px solid var(--workspace-line); }
+  .workspace-thread > header strong, .workspace-thread small { display: block; }
+  .workspace-list small, .workspace-thread small { color: #516580; font-size: .65rem; }
+  .workspace-messages { display: grid; align-content: start; gap: .25rem; padding: .42rem; }
+  .inbox-workspace .workspace-messages p { margin: 0; color: inherit; font-size: inherit; line-height: inherit; }
+  .inbox-workspace .workspace-messages .workspace-incoming { color: #17263a; font-size: .71rem; font-weight: 500; }
+  .workspace-incoming small { margin-top: .12rem; color: #526072; font-weight: 450; text-align: end; font-variant-numeric: tabular-nums; }
+  .workspace-incoming, .workspace-outgoing { width: fit-content; max-width: 96%; padding: .32rem .45rem; border-radius: 8px 8px 8px 3px; background: #eef1f6; }
+  .workspace-outgoing { justify-self: end; border-radius: 8px 8px 3px 8px; background: #e8f1ff; }
+  .inbox-workspace .workspace-messages .workspace-outgoing { background: #0866ff; color: #fff; }
+  .workspace-outgoing strong, .workspace-order p { display: flex; align-items: center; gap: .28rem; }
+  .workspace-outgoing strong, .workspace-outgoing small { color: #fff; }
+  .workspace-outgoing svg, .workspace-order svg { width: .8rem; height: .8rem; flex: none; }
+  .workspace-reply, .workspace-order { display: grid; }
+  .workspace-reply > *, .workspace-order > * { grid-area: 1 / 1; }
+  .workspace-product { display: flex; align-items: center; gap: .45rem; padding: .3rem .4rem; border: 1px solid var(--workspace-line); border-radius: 5px; }
+  .workspace-product :global(.sample-product-thumb) { width: 1.65rem; height: 1.65rem; }
+  .workspace-product button { margin-inline-start: auto; padding: .15rem .35rem; border: 1px solid #b4d1fc; border-radius: 4px; color: #0756cf; font-weight: 700; cursor: pointer; }
+  .workspace-product button:disabled { color: #176744; border-color: #c8e7d8; cursor: default; }
+  .workspace-product button:focus-visible { outline: 2px solid #0866ff; }
+  .workspace-order { color: #176744; font-size: .7rem; font-weight: 650; }
+  .inbox-workspace .workspace-order p:first-child { color: #516580; }
+  [data-inbox-reveal]:not([data-revealed="true"]), [data-inbox-confirming], [data-inbox-typing] { visibility: hidden; }
+  [data-stage="4"] [data-inbox-scene][aria-hidden="false"] [data-inbox-confirming], [data-stage="1"] [data-inbox-scene][aria-hidden="false"] [data-inbox-typing] { visibility: visible; }
+  .workspace-thread[aria-hidden="false"] [data-revealed="true"] { animation: workspace-reply-in .38s ease both; }
+  .workspace-typing { display: flex; justify-self: end; align-self: start; align-items: center; gap: .22rem; margin-inline-end: .12rem; padding: .58rem .5rem; border-radius: 8px 8px 3px 8px; background: #e8f1ff; }
+  .workspace-typing i { width: .29rem; height: .29rem; border-radius: 50%; background: #527cbb; animation: workspace-dot .9s infinite alternate; }
+  .workspace-typing i:nth-child(2) { animation-delay: .13s; }
+  .workspace-typing i:nth-child(3) { animation-delay: .26s; }
+  .inbox-workspace:has([data-paused="true"]) .workspace-typing i { animation-play-state: paused; }
+  .workspace-play svg { width: .82rem; height: .82rem; }
+  .workspace-play { display: grid; place-items: center; flex: none; width: 1.5rem; height: 1.5rem; border: 1px solid var(--workspace-line); border-radius: 4px; color: #0756cf; background: white; cursor: pointer; }
+  .workspace-play[hidden], button:not([data-paused="true"]) [data-play], button[data-paused="true"] [data-pause] { display: none; }
+  @keyframes workspace-reply-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  @keyframes workspace-dot { from { opacity: .48; transform: translateY(0); } to { opacity: 1; transform: translateY(-3px); } }
+  @container inbox-workspace (max-width: 400px) {
+    .workspace-body { grid-template-columns: minmax(0,.75fr) minmax(0,1.4fr); }
+    .workspace-rail { display: none; }
+    .workspace-list button { grid-template-columns: minmax(0,1fr) auto; }
+    .workspace-list button .workspace-avatar { display: none; }
+  }
+  @container inbox-workspace (max-width: 310px) {
+    .workspace-tab { display: none; }
+    .workspace-body { grid-template-columns: minmax(0,1fr); }
+    .workspace-list { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .22rem; border-inline-end: 0; border-bottom: 1px solid var(--workspace-line); }
+    .workspace-list-label { grid-column: 1 / -1; margin-bottom: 0; }
+    .workspace-list button { grid-template-columns: auto minmax(0,1fr); gap: .18rem; }
+    .workspace-list button > img { grid-column: 1; grid-row: 1; }
+    .workspace-person { grid-column: 2; grid-row: 1; }
+    .workspace-person small { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .workspace-messages *, .workspace-typing i { animation: none !important; } }
+</style>

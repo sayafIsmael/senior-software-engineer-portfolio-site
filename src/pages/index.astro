@@ -1,4 +1,6 @@
 ---
+import AiSystemsShowcase from '../components/sections/AiSystemsShowcase.astro';
+
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/ui/Icon.astro';
 import CalendlyBooking from '../components/ui/CalendlyBooking.astro';
@@ -137,6 +139,8 @@ import { capabilities, architecture, principles, process, projects } from '../da
         ))}
       </div>
     </section>
+
+    <AiSystemsShowcase />
 
     <section id="architecture" class="section section-rule" aria-labelledby="architecture-title">
       <div class="section-heading"><div><p class="eyebrow"><span class="eyebrow-mark"></span> The thinking behind the system</p><h2 id="architecture-title">Architecture thinking</h2><p class="section-lead">From requirements to operational resilience — each decision has a reason.</p></div></div>

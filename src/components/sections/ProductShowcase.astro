@@ -1,6 +1,8 @@
 ---
 import Icon from '../ui/Icon.astro';
 import { site } from '../../data/site';
+import CommerceDashboardPreview from './product-previews/CommerceDashboardPreview.astro';
+import InboxConversationPreview from './product-previews/InboxConversationPreview.astro';
 
 interface Props {
   kind: 'commerce' | 'automation';
@@ -25,90 +27,14 @@ const features = commerce ? [
   ['settings', 'Team access', 'Assign chats and set permissions.'],
   ['shopping-cart', 'Chat-to-order', 'Create orders from customer chats.'],
 ];
-const products = [
-  { name: 'Premium Tee', units: 38, share: 96, tone: 'blue' },
-  { name: 'Canvas Tote', units: 26, share: 66, tone: 'amber' },
-  { name: 'Classic Polo', units: 18, share: 46, tone: 'green' },
-];
-const stages = commerce ? ['Sales overview', 'Order received', 'Dashboard updated'] : ['Message received', 'AI reply sent', 'Order confirmed'];
+
 ---
 <section class="showcase" data-showcase data-product-title={title} aria-label={title + ' preview with sample data'}>
 
-  {commerce ? (
-    <div class="product-window dashboard">
-      <div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div>
-      <header class="window-bar">
-        <strong><span class="desk-mark"><Icon name="shopping-cart" size={13} /></span> Commerce Desk</strong>
-        <span class="window-meta"><i></i> Last 30 days</span>
-      </header>
-      <div class="desk-layout">
-      <aside class="desk-rail" aria-hidden="true">
-        {[['layout-grid', 'Overview'], ['shopping-cart', 'Orders'], ['mail', 'Live Chat'], ['store', 'Customers'], ['bell', 'Marketing'], ['settings', 'Settings']].map(([icon, label]) => (
-          <span><Icon name={icon} size={13} /><small>{label}</small></span>
-        ))}
-      </aside>
-      <div class="window-content">
-        <dl class="metrics">
-          <div><dt><Icon name="shopping-cart" size={12} /> Total orders</dt><dd data-before="248" data-after="249">249</dd></div>
-          <div><dt><Icon name="credit-card" size={12} /> Collected</dt><dd>৳2,46,800</dd></div>
-          <div><dt><Icon name="package" size={12} /> Pending</dt><dd data-before="12" data-after="13">13</dd></div>
-        </dl>
-        <div class="reports">
-          <div class="report">
-            <strong>Sales over time</strong>
-            <svg class="sales-chart" viewBox="0 0 200 64" preserveAspectRatio="none" role="img" aria-label="Sample sales trend rising through the month">
-              <path class="chart-grid" d="M0 18H200M0 36H200M0 54H200" />
-              <path class="chart-fill" d="M0 51 22 46 44 49 66 33 88 38 110 22 132 30 154 18 176 23 200 7V64H0Z" />
-              <path class="chart-line" pathLength="1" d="M0 51 22 46 44 49 66 33 88 38 110 22 132 30 154 18 176 23 200 7" />
-            </svg>
-          </div>
-          <div class="report">
-            <strong>Top-selling products</strong>
-            <ul class="best-sellers">
-              {products.map(({ name, units, share, tone }) => (
-                <li><span class:list={['item-mark', tone]}><Icon name={tone === 'amber' ? 'package' : 'store'} size={12} /></span><span class="seller-name">{name}<span class="seller-track" aria-hidden="true"><span style={`width:${share}%`}></span></span></span><span aria-label={`${units} sold`}>{units}</span></li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div class="recent"><span class="item-mark blue"><Icon name="package" size={12} /></span><strong>#EC-1042</strong><span>Premium Tee</span><strong>৳1,290</strong><span class="order-status">Pending</span></div>
-      </div>
-      </div>
-    </div>
-  ) : (
-    <div class="product-window inbox">
-      <div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div>
-      <header class="window-bar">
-        <strong><span class="desk-mark"><Icon name="mail" size={13} /></span> Unified inbox</strong>
-        <ul class="channels" aria-label="Connected channels">
-          {['Messenger', 'Instagram', 'WhatsApp'].map((channel) => (
-            <li><img src={`/images/showcase/${channel.toLowerCase()}.svg`} alt={channel} width="17" height="17" /></li>
-          ))}
-        </ul>
-      </header>
-      <div class="inbox-layout">
-        <aside class="channel-rail" aria-label="Sample inbox channels">
-          <strong>All chats</strong>
-          {['Messenger', 'Instagram', 'WhatsApp'].map((channel, index) => (
-            <span><img src={`/images/showcase/${channel.toLowerCase()}.svg`} alt="" width="13" height="13" />{channel}<b>{[12, 8, 24][index]}</b></span>
-          ))}
-        </aside>
-      <div class="window-content chat">
-        <div class="contact"><span class="avatar" aria-hidden="true">NR</span><div><strong>Nadia Rahman</strong><span>Messenger conversation</span></div></div>
-        <ol class="thread" aria-label="Sample conversation">
-          <li><span class="speaker">Nadia</span>Hi! Is the black tee available in size L?</li>
-          <li><span class="speaker"><Icon name="sparkles" size={11} /> AI assistant</span>Yes! ৳1,290 with delivery. You can pay on arrival.</li>
-          <li><span class="speaker">Nadia</span>Great, I’ll take one.</li>
-        </ol>
-        <div class="confirmation"><Icon name="check-circle" size={16} /><strong>Order confirmed</strong><span>#EC-1042</span></div>
-      </div>
-      </div>
-    </div>
-  )}
-
-  <ol class="demo-flow" aria-label="Demo steps">
-    {stages.map((stage) => <li><span class="step-dot"><Icon name="check-circle" size={12} /></span>{stage}</li>)}
-  </ol>
+  <div class="portfolio-product-window">
+    <div class="portfolio-window-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+    {commerce ? <CommerceDashboardPreview /> : <InboxConversationPreview />}
+  </div>
 
     <details class="feature-list" open>
       <summary class="feature-heading" id={kind + '-features'}>
@@ -123,175 +49,13 @@ const stages = commerce ? ['Sales overview', 'Order received', 'Dashboard update
     </details>
   <footer class="showcase-footer">
     <div class="showcase-actions">
-      <button type="button" class="replay" data-playback hidden aria-label={'Pause ' + title + ' demo'}>
-        <span class="pause-icon"><Icon name="pause" size={17} /></span>
-        <span class="play-icon"><Icon name="play" size={17} /></span>
-      </button>
       <a class="view-live" href={target} target="_blank" rel="noopener noreferrer" aria-label={'View live: ' + title}>View live <Icon name="arrow-up-right" size={15} /></a>
     </div>
   </footer>
 </section>
 
-<script>
-  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const playback = new Map<Element, (visible: boolean) => void>();
-  const observer = new IntersectionObserver((entries) => {
-    for (const entry of entries) {
-      playback.get(entry.target)?.(entry.isIntersecting && entry.intersectionRatio >= .3);
-    }
-  }, { threshold: .3 });
-
-  document.querySelectorAll<HTMLElement>('[data-showcase]').forEach((card) => {
-    const preview = card.querySelector<HTMLElement>('.product-window');
-    const button = card.querySelector<HTMLButtonElement>('[data-playback]');
-    if (!preview || !button) return;
-
-    const metrics = [...preview.querySelectorAll<HTMLElement>('[data-before]')];
-    const updateAt = 2020;
-    const cycleDuration = 6200;
-    let timer: number | undefined;
-    let startedAt: number | undefined;
-    let elapsed = 0;
-    let updated = false;
-    let visible = false;
-    let paused = false;
-    const updateMetrics = (state: 'before' | 'after') => {
-      for (const metric of metrics) metric.textContent = metric.dataset[state] ?? '';
-    };
-    const freeze = () => {
-      window.clearTimeout(timer);
-      if (startedAt !== undefined) elapsed += performance.now() - startedAt;
-      startedAt = undefined;
-      card.style.setProperty('--demo-play-state', 'paused');
-    };
-    const resetCycle = () => {
-      elapsed = 0;
-      updated = false;
-      card.classList.remove('is-playing');
-      updateMetrics('before');
-      void preview.offsetWidth;
-      card.classList.add('is-playing');
-    };
-    const schedule = () => {
-      startedAt = performance.now();
-      const nextUpdate = metrics.length > 0 && !updated;
-      timer = window.setTimeout(() => {
-        freeze();
-        if (nextUpdate) {
-          updateMetrics('after');
-          updated = true;
-        } else {
-          resetCycle();
-        }
-        resume();
-      }, Math.max(0, (nextUpdate ? updateAt : cycleDuration) - elapsed));
-    };
-    const resume = () => {
-      if (startedAt !== undefined) return;
-      if (!card.classList.contains('is-playing')) resetCycle();
-      card.style.setProperty('--demo-play-state', 'running');
-      schedule();
-    };
-    const syncPlayback = () => {
-      button.hidden = motion.matches;
-      if (motion.matches) {
-        freeze();
-        card.classList.remove('is-playing');
-        updateMetrics('after');
-      } else if (!visible || paused || document.hidden) {
-        freeze();
-      } else {
-        resume();
-      }
-    };
-    button.hidden = motion.matches;
-    motion.addEventListener('change', syncPlayback);
-    document.addEventListener('visibilitychange', syncPlayback);
-    playback.set(preview, (inView) => {
-      if (visible === inView) return;
-      visible = inView;
-      syncPlayback();
-    });
-    observer.observe(preview);
-    button.addEventListener('click', () => {
-      paused = !paused;
-      const action = paused ? 'Resume' : 'Pause';
-      button.classList.toggle('is-paused', paused);
-      button.setAttribute('aria-label', action + ' ' + card.dataset.productTitle + ' demo');
-      syncPlayback();
-    });
-  });
-</script>
-
 <style>
   .showcase { min-width: 0; display: grid; gap: 8px; padding: clamp(10px, 1.25vw, 15px); border: 1px solid var(--border); border-radius: 9px; background: linear-gradient(155deg, var(--surface), var(--surface-low)); box-shadow: var(--shadow); text-align: start; }
-  .window-bar, .contact, .confirmation { display: flex; align-items: center; gap: 8px; }
-  .desk-mark, .item-mark, .avatar { display: inline-grid; place-items: center; flex: none; border-radius: 5px; }
-  .desk-mark { width: 22px; height: 22px; background: #dbeaff; color: #124da7; }
-  .product-window { container-type: inline-size; min-width: 0; overflow: hidden; border: 1px solid #dce5f3; border-radius: 8px; background: linear-gradient(150deg, #fff, #eef4ff); color: #24334b; font-size: .76rem; box-shadow: 0 6px 18px #17356416; }
-  .window-bar { justify-content: space-between; min-height: 36px; padding: 5px 9px; border-bottom: 1px solid #e1e9f5; background: #fff; color: #132b4e; }
-  .window-bar strong { display: flex; align-items: center; gap: 6px; }
-  .window-dots { display: flex; align-items: center; gap: 4px; padding: 5px 9px; background: #f5f8fd; border-bottom: 1px solid #e1e9f5; }
-  .window-dots i { width: 6px; height: 6px; border-radius: 50%; background: #fa6058; }
-  .window-dots i:nth-child(2) { background: #f5b33d; }
-  .window-dots i:nth-child(3) { background: #28bd65; }
-  .inbox-layout { display: grid; grid-template-columns: minmax(100px, 24%) minmax(0, 1fr); }
-  .channel-rail { display: grid; align-content: start; gap: 6px; padding: 8px 5px; border-inline-end: 1px solid #dce5f3; background: #f2f6fc; font-size: .64rem; }
-  .channel-rail span { display: flex; align-items: center; gap: 3px; padding: 4px 2px; }
-  .channel-rail span:first-of-type { background: #e1edff; border-radius: 4px; }
-  .channel-rail b { margin-inline-start: auto; }
-  .window-meta { display: inline-flex; align-items: center; gap: 5px; color: #415773; font-size: .69rem; white-space: nowrap; }
-  .window-meta i { width: 5px; height: 5px; border-radius: 50%; background: #16805a; }
-  .desk-layout { display: grid; grid-template-columns: 31px minmax(0, 1fr); }
-  .desk-rail { display: grid; align-content: start; justify-items: center; gap: 4px; padding: 7px 2px; background: #12233e; color: #bdcce5; }
-  .desk-rail span { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 4px; }
-  .desk-rail span:first-child { color: white; background: #215dc9; }
-  .desk-rail small { display: none; }
-  @container (min-width: 440px) {
-    .desk-layout { grid-template-columns: 81px minmax(0, 1fr); }
-    .desk-rail { justify-items: stretch; padding-inline: 4px; }
-    .desk-rail span { display: flex; gap: 4px; width: auto; padding-inline: 4px; }
-    .desk-rail small { display: inline; font-size: .61rem; }
-  }
-  .window-content { display: grid; gap: 8px; padding: 8px; }
-  .metrics, .reports { display: grid; gap: 6px; margin: 0; }
-  .metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .reports { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
-  .metrics > div, .report, .recent { min-width: 0; padding: 7px; border: 1px solid #dfe6f0; border-radius: 5px; background: white; }
-  .metrics dt { display: flex; align-items: center; gap: 4px; font-size: .67rem; color: #4c5e77; }
-  .metrics dt .icon { color: #215dc9; flex: none; }
-  .metrics dd { margin: 3px 0 0; color: #132d51; font-size: clamp(.76rem, 3.8cqw, 1rem); font-weight: 750; white-space: nowrap; }
-  .report > strong { display: block; font-size: .71rem; line-height: 1.25; }
-  .sales-chart { display: block; width: 100%; height: 54px; margin-top: 6px; }
-  .chart-grid { fill: none; stroke: #deebfb; }
-  .chart-fill { fill: #e3edfd; }
-  .chart-line { fill: none; stroke: #2a68d2; stroke-width: 2; vector-effect: non-scaling-stroke; }
-  .showcase .best-sellers, .showcase .thread, .showcase .channels { list-style: none; padding: 0; margin: 0; }
-  .best-sellers li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 4px; margin: 5px 0 0; line-height: 1.15; font-size: .66rem; }
-  .seller-track { display: block; height: 2px; margin-top: 3px; background: #e8eef6; }
-  .seller-track span { display: block; height: 100%; background: #567bb0; }
-  .item-mark { width: 17px; height: 17px; }
-  .item-mark.blue { background: #e5efff; color: #244c9e; }
-  .item-mark.amber { background: #ffe9cf; color: #8b4410; }
-  .item-mark.green { background: #dbf3e7; color: #216348; }
-  .recent { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: .69rem; }
-  .recent > strong:nth-of-type(2) { margin-inline-start: auto; }
-  .order-status { color: #754617; background: #fff0d8; padding: 2px 4px; border-radius: 4px; }
-  .channels { display: flex; gap: 6px; }
-  .channels li { display: grid; place-items: center; padding: 3px; border-radius: 5px; background: white; margin: 0; }
-  .channels img { display: block; }
-  .contact { line-height: 1.3; }
-  .contact div span { display: block; font-size: .69rem; color: #4c5e77; }
-  .avatar { width: 28px; height: 28px; background: #e8e1fc; color: #593e92; font-weight: 700; }
-  .thread { display: grid; gap: 5px; }
-  .thread li { margin: 0; max-width: 89%; justify-self: start; border-radius: 9px 9px 9px 3px; padding: 5px 9px; background: #e7ebf2; line-height: 1.4; }
-  .thread li:nth-child(2) { justify-self: end; border-radius: 9px 9px 3px 9px; background: linear-gradient(135deg, #1769d9, #124eaf); color: white; }
-  .speaker { display: flex; align-items: center; gap: 4px; font-size: .65rem; font-weight: 700; }
-  .confirmation { padding: 5px 8px; background: #dbf3e7; color: #185638; border-radius: 5px; }
-  .confirmation span { margin-inline-start: auto; }
-  .showcase .demo-flow { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin: 0; padding: 0; }
-  .demo-flow li { display: flex; align-items: center; gap: 4px; min-width: 0; margin: 0; padding: 4px; border: 1px solid var(--border); border-radius: 4px; color: var(--ink); background: var(--surface); font-size: .63rem; line-height: 1.2; }
-  .step-dot { flex: none; display: inline-flex; color: var(--green); }
   .showcase-footer { display: flex; justify-content: flex-end; padding-top: 4px; }
   .feature-list { align-self: start; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); }
   .feature-list .feature-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 36px; padding: 4px 8px 4px 10px; border-radius: 6px; color: var(--ink); font-size: .78rem; font-weight: 750; list-style: none; cursor: pointer; }
@@ -313,54 +77,13 @@ const stages = commerce ? ['Sales overview', 'Order received', 'Dashboard update
   .feature-list li:nth-child(6) .feature-icon { background: #d8f4f3; color: #17666a; }
   .feature-list p { margin: 2px 0 0; color: var(--muted); font-size: .72rem; line-height: 1.4; }
   .feature-list li strong { display: block; line-height: 1.25; }
-  .view-live, .replay { display: inline-flex; align-items: center; gap: 5px; padding: 5px 9px; border: 1px solid var(--border-strong); border-radius: 5px; color: var(--ink); font-size: .75rem; text-decoration: none; white-space: nowrap; }
   .showcase-actions { display: flex; align-items: center; gap: 6px; }
-  .view-live { min-height: 32px; border-color: var(--green); background: var(--green); color: var(--button-ink); font-weight: 700; }
-  .replay { width: 34px; min-height: 32px; justify-content: center; padding: 0; background: var(--surface); cursor: pointer; }
-  .replay[hidden] { display: none; }
-  .replay > span { display: inline-flex; }
-  .replay:not(.is-paused) .play-icon, .replay.is-paused .pause-icon { display: none; }
+  .view-live { display: inline-flex; align-items: center; gap: 5px; padding: 5px 9px; border: 1px solid; border-radius: 5px; font-size: .75rem; text-decoration: none; min-height: 32px; border-color: var(--green); background: var(--green); color: var(--button-ink); font-weight: 700; }
   .view-live:hover { background: var(--dark-green); color: var(--button-ink); }
-  .replay:hover { border-color: var(--green); background: var(--surface-hover); }
-  @media (prefers-reduced-motion: no-preference) {
-    .is-playing .metrics > div { animation: reveal .35s ease both; }
-    .is-playing .metrics > div:nth-child(2) { animation-delay: .13s; }
-    .is-playing .metrics > div:nth-child(3) { animation-delay: .26s; }
-    .is-playing .chart-fill { animation: reveal .75s .35s ease both; }
-    .is-playing .chart-line { stroke-dasharray: 1; animation: draw-chart .9s .35s ease-out both; }
-    .is-playing .seller-track span { transform-origin: left; animation: grow-bar .55s .65s ease-out both; }
-    .is-playing .recent { animation: reveal .35s 1.45s ease both; }
-    .is-playing .metrics dd[data-before] { animation: metric-flash .6s 2.02s ease both; }
-    .is-playing .step-dot { animation: step-check .25s .15s ease-out both; }
-    .is-playing .demo-flow li:nth-child(2) .step-dot { animation-delay: 1.1s; }
-    .is-playing .demo-flow li:nth-child(3) .step-dot { animation-delay: 2.25s; }
-    .is-playing .thread li { animation: reveal .3s .15s ease both; }
-    .is-playing .thread li:nth-child(2) { animation-delay: .9s; }
-    .is-playing .thread li:nth-child(3) { animation-delay: 1.65s; }
-    .is-playing .confirmation { animation: reveal .35s 2.25s ease both; }
-    .is-playing :is(.metrics > div, .chart-fill, .chart-line, .seller-track span, .recent, .metrics dd[data-before], .step-dot, .thread li, .confirmation) {
-      animation-play-state: var(--demo-play-state, paused);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) { .feature-chevron { transition: none; } }
-  @keyframes reveal { from { opacity: 0; translate: 0 4px; } to { opacity: 1; translate: 0 0; } }
-  @keyframes draw-chart { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
-  @keyframes grow-bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-  @keyframes step-check { from { opacity: .2; scale: .75; } to { opacity: 1; scale: 1; } }
-  @keyframes metric-flash { 35% { color: #087449; translate: 0 -2px; } }
-  @container (max-width: 350px) {
-    .inbox-layout { grid-template-columns: minmax(0, 1fr); }
-    .channel-rail { display: none; }
-  }
-  @container (max-width: 290px) {
-    .desk-layout { grid-template-columns: minmax(0, 1fr); }
-    .desk-rail { display: none; }
-    .report { padding: 5px; }
-    .best-sellers li { grid-template-columns: minmax(0, 1fr) auto; }
-    .best-sellers .item-mark { display: none; }
-  }
-  @media (max-width: 380px) {
-    .feature-list li { gap: 5px; padding-inline: 5px; }
-    .feature-icon { width: 21px; height: 21px; }
-  }
+  .portfolio-product-window { display: grid; grid-template-rows: auto 1fr; min-width: 0; border: 1px solid #d9e6ef; border-radius: 4px; background: #fff; box-shadow: 0 8px 18px #23486c16; }
+  .portfolio-window-bar { display: flex; gap: .28rem; padding: .47rem; border-bottom: 1px solid #e8edf2; }
+  .portfolio-window-bar i { width: .38rem; height: .38rem; border-radius: 50%; background: #fa5555; }
+  .portfolio-window-bar i:nth-child(2) { background: #f4b226; }
+  .portfolio-window-bar i:nth-child(3) { background: #23a64d; }
+  @media (max-width: 380px) { .feature-list li { gap: 5px; padding-inline: 5px; } .feature-icon { width: 21px; height: 21px; } }
 </style>

@@ -71,11 +71,11 @@
   --green-2: #72e890;
   --mint: #17291e;
   --mint-strong: #21402b;
-  --border: #27332b;
+  --border: #2a3238;
   --border-strong: #3b4c41;
-  --surface: #141b16;
-  --surface-low: #101611;
-  --surface-hover: #1a231d;
+  --surface: #171b1e;
+  --surface-low: #121619;
+  --surface-hover: #20262a;
   --shadow: 0 14px 36px rgba(0, 0, 0, .38);
   --focus: 3px solid #92f5aa;
   --nav-link: #e4ebe5;
@@ -90,7 +90,7 @@
   --footer-meta: #9aa79d;
   --selection-bg: #2d5a38;
   --selection-ink: #f5f7f4;
-  --glow: rgba(70, 140, 90, .16);
+  --glow: rgba(94, 136, 124, .09);
   --booking-frame: #182119;
   --button-ink: #0c2113;
 }
@@ -600,10 +600,10 @@ html.is-ready .hero-architecture {
 .project-row + .project-row { border-top: 1px solid var(--border); padding-top: 24px; }
 @media (min-width: 56rem) {
   .project-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(20px, 3vw, 40px); row-gap: 14px; }
-  .project-row { grid-row: span 7; grid-template-rows: subgrid; }
+  .project-row { grid-row: span 6; grid-template-rows: subgrid; }
   .project-row > .project-copy { display: grid; grid-row: span 3; grid-template-rows: subgrid; gap: 4px; }
   .project-row .project-copy h3, .project-row .project-copy > p { margin-bottom: 0; }
-  .project-row > .showcase { grid-row: span 4; grid-template-rows: subgrid; }
+  .project-row > .showcase { grid-row: span 3; grid-template-rows: subgrid; }
   .project-row + .project-row { border-top: 0; padding-top: 0; }
 }
 .project-title-line { display: flex; align-items: first baseline; gap: 15px; }

@@ -1,0 +1,22 @@
+---
+import Icon from './PreviewIcon.astro';
+interface Props { variant?: 'tee' | 'tote' | 'polo' }
+const { variant = 'tee' } = Astro.props;
+---
+<span class:list={["sample-product-thumb", "thumb-" + variant]} aria-hidden="true">
+  {variant === "tee" ? <svg viewBox="0 0 48 48" fill="none">
+    <path d="M16 8 8 11l-6 12 8 4 4-6v19h20V21l4 6 8-4-6-12-8-3c-2 3-4 4-8 4s-6-1-8-4Z" fill="#273244" stroke="#131b29" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M17 9c2 4 5 6 7 6s5-2 7-6M14 36h20M5 22l5 3m28 0 5-3" stroke="#566680" stroke-width="1" stroke-linecap="round"/>
+  </svg> : <Icon name={variant === "tote" ? "lucide:shopping-bag" : "lucide:shirt"} /> }
+</span>
+
+<style>
+  .sample-product-thumb { display: grid; place-items: center; flex: none; width: 1.25rem; height: 1.25rem; border-radius: 4px; background: #dce9ff; }
+  .sample-product-thumb svg { width: .88rem; height: .88rem; padding: 0; background: transparent; }
+  .thumb-tote { background: #fde8cf; color: #9b4d18; }
+  .thumb-polo { background: #dff3e9; color: #236748; }
+  @container commerce-preview (max-width: 340px) {
+    .sample-product-thumb { width: .95rem; height: .95rem; }
+    .sample-product-thumb svg { width: .72rem; height: .72rem; }
+  }
+</style>
