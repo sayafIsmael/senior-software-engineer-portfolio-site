@@ -1064,7 +1064,7 @@ a.video-card:hover .video-play { transform: translate(-50%, -50%) scale(1.06); }
 .footer h2 { font-size: clamp(1.65rem, 3vw, 2.35rem); margin-bottom: 8px; }
 .footer p:not(.eyebrow) { color: var(--muted); font-size: .95rem; margin: 0; max-width: 48ch; }
 
-.footer-phone { margin-top: 10px; }
+.booking-copy .booking-phone { margin-block: .65rem 0; }
 .footer-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; flex-shrink: 0; }
 .footer h2 { font-size: clamp(1.65rem, 3vw, 2.35rem); margin-bottom: 8px; }
 .footer p:not(.eyebrow) { color: var(--muted); font-size: .95rem; margin: 0; max-width: 46ch; }
