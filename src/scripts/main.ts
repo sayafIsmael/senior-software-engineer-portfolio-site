@@ -343,18 +343,6 @@ function init(): void {
     });
   });
 
-  const architecture = document.querySelector<HTMLElement>('[data-architecture-stage]');
-  if (architecture) {
-    const summary = architecture.querySelector<HTMLElement>('[data-architecture-description]');
-    architecture.querySelectorAll<HTMLButtonElement>('[data-architecture-step]').forEach((button) => {
-      button.addEventListener('click', () => {
-        activateExclusive(architecture, '[data-architecture-step]', button);
-        const index = Number(button.dataset.architectureStep);
-        if (summary && Number.isInteger(index)) summary.textContent = button.dataset.architectureDetail ?? '';
-      });
-    });
-  }
-
   const process = document.querySelector<HTMLElement>('[data-process]');
   if (process) {
     const summary = process.querySelector<HTMLElement>('[data-process-detail]');

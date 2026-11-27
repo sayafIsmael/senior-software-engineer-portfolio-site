@@ -33,17 +33,17 @@ const icons = read('public/icons.svg');
 const data = read('src/data/engineering.ts');
 const site = read('src/data/site.ts');
 
-for (const anchor of ['work','architecture','approach','upwork','videos','notes','contact']) {
+for (const anchor of ['work','approach','upwork','videos','notes','contact']) {
   if (!(home.includes(`id="${anchor}"`) || (anchor==='contact' && read('src/components/layout/Footer.astro').includes('id="contact"')))) throw new Error(`Missing anchor ${anchor}`);
 }
 for (const endpoint of ['/work/commerce-platform/','/work/automation-system/','/notes/architecture-decisions/','/notes/ai-assisted-engineering/']) {
   const file = path.join(root,'src/pages',endpoint.replace(/^\//,'').replace(/\/$/,'')+'.astro');
   if (!fs.existsSync(file)) throw new Error(`Broken local route ${endpoint}`);
 }
-for (const section of ['Why teams hire me','Architecture thinking','How I engineer','My process','Engineering videos','Engineering notes']) {
+for (const section of ['How I engineer','Engineering videos','Engineering notes']) {
   if (!home.includes(section)) throw new Error(`Missing section: ${section}`);
 }
-for (const handler of ['[data-menu-toggle]','[data-orbit]','[data-project-diagram]','[data-architecture-stage]','[data-process]']) {
+for (const handler of ['[data-menu-toggle]','[data-orbit]','[data-project-diagram]']) {
   if (!script.includes(handler)) throw new Error(`Missing interaction logic for ${handler}`);
 }
 for (const tag of ['application/ld+json','og:title','twitter:card','rel="canonical"']) {

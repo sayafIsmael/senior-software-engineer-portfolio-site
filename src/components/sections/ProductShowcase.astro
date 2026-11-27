@@ -6,9 +6,10 @@ import InboxConversationPreview from './product-previews/InboxConversationPrevie
 
 interface Props {
   kind: 'commerce' | 'automation';
+  detailsHref?: string;
 }
 
-const { kind } = Astro.props;
+const { kind, detailsHref } = Astro.props;
 const commerce = kind === 'commerce';
 const title = commerce ? 'Easy Commerce' : 'Easy Inbox';
 const target = commerce ? site.links.ecommerce : site.links.automation;
@@ -29,14 +30,17 @@ const features = commerce ? [
 ];
 
 ---
-<section class="showcase" data-showcase data-product-title={title} aria-label={title + ' preview with sample data'}>
+<section class:list={["showcase", { "showcase-linked": detailsHref }]} data-showcase data-product-title={title} aria-label={title + ' preview with sample data'}>
 
-  <div class="portfolio-product-window">
+  <div class="portfolio-preview"><div class="portfolio-product-window" inert={Boolean(detailsHref)}>
     <div class="portfolio-window-bar" aria-hidden="true"><i></i><i></i><i></i></div>
-    {commerce ? <CommerceDashboardPreview /> : <InboxConversationPreview />}
+    {commerce ? <CommerceDashboardPreview /> : <InboxConversationPreview autoplayOnly={Boolean(detailsHref)} />}
   </div>
 
-    <details class="feature-list" open>
+    {detailsHref && <a class="preview-link" href={detailsHref} aria-label={'View details for ' + title}></a>}
+  </div>
+
+  {!detailsHref && <details class="feature-list" open>
       <summary class="feature-heading" id={kind + '-features'}>
         <span>Key features</span>
         <span class="feature-chevron"><Icon name="chevron-down" size={15} /></span>
@@ -46,15 +50,23 @@ const features = commerce ? [
           <li><span class="feature-icon"><Icon name={icon} size={15} /></span><div><strong>{label}</strong><p>{description}</p></div></li>
         ))}
       </ul>
-    </details>
+    </details>}
   <footer class="showcase-footer">
     <div class="showcase-actions">
-      <a class="view-live" href={target} target="_blank" rel="noopener noreferrer" aria-label={'View live: ' + title}>View live <Icon name="arrow-up-right" size={15} /></a>
+      <a class="view-live" href={detailsHref ?? target} target={detailsHref ? undefined : "_blank"} rel={detailsHref ? undefined : "noopener noreferrer"} aria-label={(detailsHref ? "View details for " : "View live: ") + title}>{detailsHref ? "View details" : "View live"} <Icon name="arrow-up-right" size={15} /></a>
     </div>
   </footer>
 </section>
 
 <style>
+  .portfolio-preview { position: relative; display: grid; min-width: 0; }
+  .showcase-linked { grid-template-rows: 1fr auto; }
+  .preview-link { position: absolute; inset: 0; border-radius: 4px; }
+  .preview-link:is(:hover,:focus-visible) { box-shadow: inset 0 0 0 2px var(--green); }
+  @media (prefers-reduced-motion: no-preference) {
+    .portfolio-product-window[inert] :global(.desk-preview-line) { animation: portfolio-chart 8s ease-out infinite; }
+  }
+  @keyframes portfolio-chart { 0% { stroke-dashoffset: 1; } 18%,100% { stroke-dashoffset: 0; } }
   .showcase { min-width: 0; display: grid; gap: 8px; padding: clamp(10px, 1.25vw, 15px); border: 1px solid var(--border); border-radius: 9px; background: linear-gradient(155deg, var(--surface), var(--surface-low)); box-shadow: var(--shadow); text-align: start; }
   .showcase-footer { display: flex; justify-content: flex-end; padding-top: 4px; }
   .feature-list { align-self: start; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); }

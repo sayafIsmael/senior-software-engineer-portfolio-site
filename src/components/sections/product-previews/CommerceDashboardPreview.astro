@@ -3,8 +3,8 @@ import Icon from './PreviewIcon.astro';
 
 import ProductThumbnail from './ProductThumbnail.astro';
 
-interface Props { showSecondOrder?: boolean }
-const { showSecondOrder = false } = Astro.props;
+
+
 const metrics = [
   ['shopping-cart', 'Total Orders', '248', 'violet'],
   ['trending-up', 'Collected', '৳246,800', 'green'],
@@ -18,16 +18,22 @@ const bestSellers = [
   { name: 'Canvas Tote', variant: 'tote', units: 26 },
   { name: 'Classic Polo', variant: 'polo', units: 18 },
 ] as const;
+const recentOrders = [
+  { id: '#EC-1041', name: 'Premium Tee', variant: 'tee', total: '৳1,290', status: 'Pending' },
+  { id: '#EC-1039', name: 'Classic Polo', variant: 'polo', total: '৳1,450', status: 'Paid' },
+] as const;
 ---
-<div class="desk-preview" data-commerce-preview data-hero={showSecondOrder || undefined} aria-label="Commerce dashboard with sample data">
+<div class="desk-preview" data-commerce-preview aria-label="Commerce dashboard with sample data">
   <aside aria-hidden="true">
     <strong class="desk-preview-brand">
       <span class="desk-preview-mark"><Icon name="lucide:shopping-cart" aria-hidden="true" /></span>
       <span class="desk-preview-name">Commerce Desk</span>
     </strong>
-    {links.map(([icon, text], index) => (
-      <span class:list={['desk-preview-link', { 'desk-preview-current': index === 0 }]}><Icon name={`lucide:${icon}`} /><span><span>{text}</span></span></span>
-    ))}
+    <div class="desk-preview-nav">
+      {links.map(([icon, text], index) => (
+        <span class:list={['desk-preview-link', { 'desk-preview-current': index === 0 }]}><Icon name={`lucide:${icon}`} /><span><span>{text}</span></span></span>
+      ))}
+    </div>
   </aside>
   <div class="desk-preview-main">
     <header class="desk-preview-toolbar">
@@ -67,40 +73,71 @@ const bestSellers = [
       </div>
       <section class="desk-preview-recent" aria-label="Recent orders">
         <strong><span>Recent orders</span></strong>
-        <div>
-          <span><span class="desk-order-before">#EC-1041</span><span class="desk-order-after">#EC-1042</span></span>
-          <span class="desk-preview-recent-product"><ProductThumbnail /> <span>Premium Tee</span></span><span>৳1,290</span><small><span>Pending</span></small>
-        </div>
-        {showSecondOrder && (
-          <div>
-            <span>#EC-1040</span>
-            <span class="desk-preview-recent-product"><ProductThumbnail variant="tote" /> <span>Canvas Tote</span></span>
-            <span>৳990</span><small class="desk-preview-paid"><span>Paid</span></small>
-          </div>
-        )}
+        <table class="desk-preview-orders-table">
+          <thead>
+            <tr>
+              {['Order no.', 'Product', 'Amount', 'Status', 'Action'].map((label) => (
+                <th scope="col"><span>{label}</span></th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {recentOrders.map(({ id, name, variant, total, status }) => {
+              const detailsId = `commerce-preview-order-${id.slice(1)}`;
+              return (
+                <tr>
+                  <th scope="row" class="desk-preview-order-id">{id}</th>
+                  <td>
+                    <span class="desk-preview-recent-product">
+                      <ProductThumbnail variant={variant} />
+                      <span>{name}</span>
+                    </span>
+                  </td>
+                  <td class="desk-preview-order-total">{total}</td>
+                  <td><small class:list={{ 'desk-preview-paid': status === 'Paid' }}>{status}</small></td>
+                  <td>
+                    <button type="button" class="desk-preview-order-action" popovertarget={detailsId} aria-label={`View sample order ${id}`}>
+                      <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" aria-hidden="true">
+                        <circle cx="8" cy="3" r="1.25" />
+                        <circle cx="8" cy="8" r="1.25" />
+                        <circle cx="8" cy="13" r="1.25" />
+                      </svg>
+                    </button>
+                    <div class="desk-preview-order-details" id={detailsId} popover>
+                      <strong>{id}</strong>
+                      <p>{name} · {total} · {status}</p>
+                      <button type="button" popovertarget={detailsId} popovertargetaction="hide">Close</button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </section>
     </div>
   </div>
 </div>
 
 <style>
-  .desk-preview { container: commerce-preview / inline-size; display: grid; grid-template-columns: clamp(5.3rem, 24%, 8rem) minmax(0,1fr); min-width: 0; background: #f5f8fc; color: #17263a; font: 400 .68rem/1.3 system-ui, sans-serif; text-align: left; }
-  .desk-preview aside { display: grid; align-content: start; min-width: 0; gap: .18rem; padding: .55rem .32rem; background: #152137; color: #f0f5ff; }
+  .desk-preview { --desk-content-padding: .45rem; container: commerce-preview / inline-size; display: grid; grid-template-rows: auto 1fr; grid-template-columns: clamp(5.3rem, 24%, 8rem) minmax(0,1fr); min-width: 0; background: #f5f8fc; color: #17263a; font: 400 .68rem/1.3 system-ui, sans-serif; text-align: left; }
+  .desk-preview aside { display: grid; grid-row: span 2; grid-template-rows: subgrid; min-width: 0; padding-inline: .32rem; background: #152137; color: #f0f5ff; }
+  .desk-preview-nav { display: grid; align-content: start; gap: .18rem; padding-block-start: var(--desk-content-padding); }
   .desk-preview-brand, .desk-preview-link, .desk-preview-toolbar strong, .desk-preview-metrics dt { display: flex; align-items: center; gap: .27rem; }
-  .desk-preview-brand { min-width: 0; margin-bottom: .35rem; font-size: .72rem; font-weight: 750; line-height: 1.25; letter-spacing: -.015em; }
-  .desk-preview-name { min-width: 0; text-wrap: balance; overflow-wrap: anywhere; }
+  .desk-preview-brand { min-width: 0; font-size: .63rem; font-weight: 750; line-height: 1.25; letter-spacing: -.015em; }
+  .desk-preview-name { min-width: 0; white-space: nowrap; }
   .desk-preview-mark { display: grid; place-items: center; flex: none; width: .78rem; height: .78rem; border-radius: 3px; background: #e7efff; color: #2458be; }
   .desk-preview-mark svg { width: .6rem; height: .6rem; }
   .desk-preview-link { min-width: 0; gap: .33rem; padding: .32rem .24rem; border-radius: 4px; color: #cdd9eb; font-size: .66rem; font-weight: 550; line-height: 1.2; }
   .desk-preview-link svg, .desk-preview-toolbar svg { width: .72rem; height: .72rem; flex: none; }
   .desk-preview-link > span { display: block; min-width: 0; overflow-wrap: anywhere; }
   .desk-preview-current { background: #2863cf; color: #fff; font-weight: 700; }
-  .desk-preview-main { min-width: 0; }
+  .desk-preview-main { display: grid; grid-row: span 2; grid-template-rows: subgrid; min-width: 0; }
   .desk-preview-toolbar { display: flex; align-items: center; justify-content: space-between; gap: .3rem; padding: .4rem .55rem; border-bottom: 1px solid #e0e8f3; background: #fff; }
   .desk-preview-toolbar strong { font-size: 1.2em; font-weight: 800; }
   .desk-preview-toolbar small { color: #4c5e77; white-space: nowrap; }
   .desk-preview-content, .desk-preview-metrics, .desk-preview-reports { display: grid; gap: .42rem; }
-  .desk-preview-content { padding: .45rem; }
+  .desk-preview-content { align-content: start; padding: var(--desk-content-padding); }
   .desk-preview-metrics { grid-template-columns: repeat(3,minmax(0,1fr)); gap: .28rem; margin: 0; }
   .desk-preview-metric, .desk-preview-reports > section, .desk-preview-recent { min-width: 0; padding: .34rem; border: 1px solid #e0e8f3; border-radius: 5px; background: #fff; box-shadow: 0 1px 2px #1826380c; }
   .desk-preview-metric { --metric-ink: #483ac5; --metric-tint: #eeedff; }
@@ -112,6 +149,9 @@ const bestSellers = [
   .desk-preview-metrics dd { margin: .18rem 0 0; color: var(--metric-ink); font-size: 1.25em; font-weight: 800; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .desk-preview-reports { grid-template-columns: minmax(0,1.05fr) minmax(0,1fr); }
   .desk-preview-graph svg { display: block; width: 100%; height: clamp(2.25rem,10cqw,4rem); margin-top: .25rem; background: repeating-linear-gradient(to top,#e8eff6 0 1px,transparent 1px 25%); }
+  @container commerce-preview (min-width: 355px) {
+    .desk-preview:not([data-hero]) .desk-preview-graph svg { height: clamp(3rem, 12cqw, 6rem); }
+  }
   .desk-preview-area { fill: #0866ff; opacity: .15; }
   .desk-preview-line { fill: none; stroke: #0866ff; stroke-width: 2; vector-effect: non-scaling-stroke; stroke-dasharray: 1; animation: preview-draw .9s ease-out both; }
   .desk-preview-dates { display: flex; justify-content: space-between; color: #4d607a; font-size: .8em; }
@@ -120,11 +160,32 @@ const bestSellers = [
   .desk-preview-sellers small { color: #526581; white-space: nowrap; }
   .desk-preview-track { display: block; height: 2px; margin-top: .2rem; border-radius: 3px; background: #e7eef7; }
   .desk-preview-track i { display: block; width: var(--sales-width); height: 100%; border-radius: inherit; background: #4a8bed; }
-  .desk-preview-recent > div { display: grid; grid-template-columns: auto minmax(0,1fr) auto auto; align-items: center; gap: .35rem; margin-top: .23rem; padding-top: .2rem; border-top: 1px solid #edf0f3; font-variant-numeric: tabular-nums; }
-  .desk-preview-recent > div > :nth-child(3) { white-space: nowrap; }
+  .desk-preview-orders-table { width: 100%; table-layout: fixed; border-collapse: collapse; margin-block-start: .25rem; font-size: .93em; font-variant-numeric: tabular-nums; }
+  .desk-preview-orders-table :is(th, td) { padding: .26rem .13rem; text-align: start; vertical-align: middle; border-top: 1px solid #edf0f3; }
+  .desk-preview-orders-table thead { color: #526581; font-size: .88em; }
+  .desk-preview-orders-table thead th:first-child { width: 22%; }
+  .desk-preview-orders-table thead th:nth-child(2) { width: 33%; }
+  .desk-preview-orders-table thead th:nth-child(3) { width: 17%; }
+  .desk-preview-orders-table thead th:nth-child(4) { width: 16%; }
+  .desk-preview-orders-table thead th:last-child { width: 12%; }
+  .desk-preview-orders-table tr > :last-child { text-align: center; }
+  .desk-preview-order-id { color: #0756cf; font-weight: 650; white-space: nowrap; }
+  .desk-preview-order-total { font-weight: 600; white-space: nowrap; }
   .desk-preview-recent-product { display: flex; align-items: center; gap: .25rem; min-width: 0; }
-  .desk-preview-recent small { padding: .06rem .2rem; border-radius: 3px; background: #fff2d6; color: #8b480e; }
+  .desk-preview-recent-product > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+  .desk-preview-recent small { display: inline-block; padding: .06rem .23rem; border-radius: 3px; background: #fff2d6; color: #8b480e; white-space: nowrap; }
   .desk-preview-recent .desk-preview-paid { background: #e5f5eb; color: #236748; }
+  .desk-preview-order-action { display: inline-grid; place-items: center; width: 1.1rem; height: 1.1rem; padding: 0; border: 0; background: transparent; color: #526581; cursor: pointer; }
+  .desk-preview-order-details { padding: 1rem; border: 1px solid #ccdff9; border-radius: 6px; background: #fff; color: #17263a; font: 500 .875rem/1.5 system-ui, sans-serif; }
+  .desk-preview-order-details p { margin: .35rem 0 .75rem; }
+  .desk-preview-order-details button { color: #0756cf; cursor: pointer; }
+  @container commerce-preview (max-width: 355px) {
+    .desk-preview-orders-table { font-size: .8em; }
+    .desk-preview-orders-table :is(th, td) { padding-inline: .06rem; }
+    .desk-preview-orders-table thead th:last-child > span { position: absolute; clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden; }
+    .desk-preview-recent-product { gap: .12rem; }
+    .desk-preview-recent small { padding-inline: .13rem; }
+  }
   .desk-order-after, :global(.workflow:is([data-stage="2"],[data-stage="3"])) .desk-order-before { display: none; }
   :global(.workflow:is([data-stage="2"],[data-stage="3"])) .desk-order-after { display: inline; color: #0756cf; }
   @keyframes preview-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
@@ -133,16 +194,15 @@ const bestSellers = [
     .desk-preview-sellers small, .desk-preview-dates { display: none; }
   }
   @container commerce-preview (max-width: 355px) {
-    .desk-preview-brand { font-size: .66rem; }
+    .desk-preview-brand { gap: .18rem; font-size: .57rem; }
     .desk-preview-link { gap: .24rem; padding-inline: .19rem; font-size: .62rem; }
     .desk-preview-link svg { width: .66rem; height: .66rem; }
     .desk-preview-metrics dt { gap: .14rem; font-size: .91em; }
     .desk-preview-metrics dd { font-size: clamp(.62rem,3.3cqw,.82rem); }
     .desk-preview-reports > section { padding-inline: .24rem; }
-    .desk-preview-recent > div { gap: .18rem; }
   }
   @container commerce-preview (max-width: 275px) {
-    .desk-preview-metrics, .desk-preview-recent > div { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .desk-preview-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
   }
   @media (prefers-reduced-motion: reduce) { .desk-preview-line { animation: none; } }
 </style>

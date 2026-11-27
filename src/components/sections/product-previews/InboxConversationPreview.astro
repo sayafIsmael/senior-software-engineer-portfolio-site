@@ -17,7 +17,7 @@ const channelSrc = (name: string) => `/images/integrations/${name.toLowerCase()}
     <div class="workspace-channels">
       {channels.map((channel) => <img src={channelSrc(channel)} alt={channel} width="16" height="16" />)}
     </div>
-    <button class="workspace-play" type="button" data-inbox-play aria-label="Pause demo"><span data-pause><Icon name="lucide:pause" /></span><span data-play><Icon name="lucide:play" /></span></button>
+    {!Astro.props.autoplayOnly && <button class="workspace-play" type="button" data-inbox-play aria-label="Pause demo"><span data-pause><Icon name="lucide:pause" /></span><span data-play><Icon name="lucide:play" /></span></button>}
   </header>
   <div class="workspace-body">
     <aside class="workspace-rail" aria-hidden="true"><Icon name="lucide:inbox" /><Icon name="lucide:message-circle" /><Icon name="lucide:git-branch" /></aside>
@@ -61,7 +61,7 @@ const channelSrc = (name: string) => `/images/integrations/${name.toLowerCase()}
     const threads = [...demo.querySelectorAll<HTMLButtonElement>('[data-inbox-thread]')];
     const scenes = [...demo.querySelectorAll<HTMLElement>('[data-inbox-scene]')];
     const orderButtons = [...demo.querySelectorAll<HTMLButtonElement>('[data-inbox-order]')];
-    const play = demo.querySelector<HTMLButtonElement>('[data-inbox-play]')!;
+    const play = demo.querySelector<HTMLButtonElement>('[data-inbox-play]');
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
     let index = 0;
     let stage = motion.matches ? 5 : 0;
@@ -70,9 +70,11 @@ const channelSrc = (name: string) => `/images/integrations/${name.toLowerCase()}
     let timer: number | undefined;
     const paint = () => {
       demo.dataset.stage = String(stage);
-      play.hidden = motion.matches;
+      if (play) {
+        play.hidden = motion.matches;
       play.dataset.paused = String(paused);
-      play.setAttribute('aria-label', paused ? 'Play demo' : 'Pause demo');
+        play.setAttribute('aria-label', paused ? 'Play demo' : 'Pause demo');
+      }
       threads.forEach((button, cursor) => button.setAttribute('aria-pressed', String(cursor === index)));
       const order = stage === 5 ? 'Ordered' : stage >= 3 ? 'Confirm' : 'Order';
       orderButtons.forEach((button, cursor) => {
@@ -103,7 +105,7 @@ const channelSrc = (name: string) => `/images/integrations/${name.toLowerCase()}
       paint();
       schedule();
     }));
-    play.addEventListener('click', () => { paused = !paused; paint(); schedule(); });
+    play?.addEventListener('click', () => { paused = !paused; paint(); schedule(); });
     orderButtons.forEach((button) => button.addEventListener('click', () => {
       paused = true;
       stage = stage < 3 ? 3 : 5;

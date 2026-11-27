@@ -596,14 +596,12 @@ html.is-ready .hero-architecture {
 
 /* Selected systems */
 .project-list { display: grid; gap: 24px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
-.project-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; min-width: 0; }
+.project-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; min-width: 0; align-content: start; }
 .project-row + .project-row { border-top: 1px solid var(--border); padding-top: 24px; }
 @media (min-width: 56rem) {
   .project-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(20px, 3vw, 40px); row-gap: 14px; }
-  .project-row { grid-row: span 6; grid-template-rows: subgrid; }
-  .project-row > .project-copy { display: grid; grid-row: span 3; grid-template-rows: subgrid; gap: 4px; }
   .project-row .project-copy h3, .project-row .project-copy > p { margin-bottom: 0; }
-  .project-row > .showcase { grid-row: span 3; grid-template-rows: subgrid; }
+  .project-row { grid-row: span 2; grid-template-rows: subgrid; }
   .project-row + .project-row { border-top: 0; padding-top: 0; }
 }
 .project-title-line { display: flex; align-items: first baseline; gap: 15px; }
@@ -719,7 +717,7 @@ html.is-ready .hero-architecture {
 
 /* Social proof */
 .upwork-layout { display: grid; grid-template-columns: minmax(250px, auto) 1fr auto; gap: 25px; align-items: center; }
-.upwork-badges { display: flex; gap: 12px; flex-wrap: wrap; }
+.upwork-badges { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
 .soft-badge {
   display: inline-flex; gap: 9px; align-items: center;
   background: linear-gradient(145deg, var(--badge-bg), color-mix(in srgb, var(--mint) 70%, var(--badge-bg)));
@@ -729,18 +727,30 @@ html.is-ready .hero-architecture {
   box-shadow: 0 8px 20px color-mix(in srgb, var(--green) 12%, transparent);
   position: relative; overflow: hidden;
 }
+a.soft-badge { color: var(--upwork-badge-ink, var(--badge-ink)); cursor: pointer; text-decoration: none; }
 .soft-badge::before {
   content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--green);
 }
-.soft-badge--accent {
-  background: linear-gradient(135deg, color-mix(in srgb, var(--green) 18%, var(--surface)), var(--mint));
+.soft-badge--top-rated {
+  --upwork-badge-ink: #fff;
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  border-color: #60a5fa;
+  box-shadow: 0 6px 16px #2563eb40;
 }
-.soft-badge--earn {
-  background: linear-gradient(135deg, var(--mint-strong), color-mix(in srgb, var(--green) 14%, var(--surface)));
-  border-color: color-mix(in srgb, var(--green) 50%, var(--card-border));
+.soft-badge--top-rated::before { background: #93c5fd; }
+.soft-badge--top-rated.soft-badge .icon { color: #dbeafe; }
+.upwork-earnings {
+  border-color: #c59a5b;
+  background: linear-gradient(145deg, #fff3dc, #ffe3b4);
+  --upwork-badge-ink: #523007;
+  box-shadow: 0 6px 16px #9c63231a;
 }
+.upwork-earnings::before { background: #c59a5b; }
+.soft-badge .upwork-earnings__icon .icon { color: #825017; }
+.upwork-earnings__icon, .upwork-earnings__copy { display: inline-flex; align-items: center; }
+.upwork-earnings__copy { gap: 4px; }
+.upwork-earnings__copy strong { font-weight: 750; font-variant-numeric: tabular-nums; }
 .soft-badge .icon { color: var(--green); }
-.soft-badge__label strong { font-weight: 700; color: var(--green); margin-right: 3px; }
 .upwork-layout > p { border-left: 1px solid var(--border-strong); padding-left: 25px; margin: 0; font-size: .95rem; line-height: 1.55; color: var(--card-text); max-width: 420px; }
 
 /* Videos — YouTube-style cards */
@@ -864,18 +874,21 @@ a.video-card:hover .video-play { transform: translate(-50%, -50%) scale(1.06); }
   align-items: center;
   flex-wrap: wrap;
 }
+.booking-copy > .booking-footnote + .booking-phone {
+  margin-block: 8px 0;
+}
 .booking-cta {
   min-height: 36px;
   padding: 0 16px;
   font-size: .82rem;
 }
-.booking-footnote {
+.booking-copy > .booking-actions + .booking-footnote {
   color: var(--soft-muted);
   font-size: .68rem;
   display: flex;
   align-items: center;
   gap: 4px;
-  margin: 32px 0 0;
+  margin: 16px 0 0;
   line-height: 1.5;
 }
 .booking-footnote .icon { color: var(--green); flex-shrink: 0; }
@@ -1064,7 +1077,6 @@ a.video-card:hover .video-play { transform: translate(-50%, -50%) scale(1.06); }
 .footer h2 { font-size: clamp(1.65rem, 3vw, 2.35rem); margin-bottom: 8px; }
 .footer p:not(.eyebrow) { color: var(--muted); font-size: .95rem; margin: 0; max-width: 48ch; }
 
-.booking-copy .booking-phone { margin-block: .65rem 0; }
 .footer-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; flex-shrink: 0; }
 .footer h2 { font-size: clamp(1.65rem, 3vw, 2.35rem); margin-bottom: 8px; }
 .footer p:not(.eyebrow) { color: var(--muted); font-size: .95rem; margin: 0; max-width: 46ch; }
