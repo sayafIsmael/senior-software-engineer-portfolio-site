@@ -10,9 +10,9 @@ const threads = [
 ] as const;
 const channelSrc = (name: string) => `/images/integrations/${name.toLowerCase()}.svg`;
 ---
-<div class="inbox-workspace" data-live-inbox data-stage="0" role="group" aria-label="Interactive Easy Inbox demo">
+<div class="inbox-workspace" data-live-inbox data-stage="0" role="group" aria-label="Interactive BajuTech Inbox demo">
   <header class="workspace-bar">
-    <strong class="workspace-brand"><img src="/images/integrations/easy-inbox.svg" alt="" width="24" height="24" /> Easy Inbox</strong>
+    <strong class="workspace-brand"><img src="/images/integrations/easy-inbox.svg" alt="" width="24" height="24" /> BajuTech Inbox</strong>
     <span class="workspace-tab">Conversations</span>
     <div class="workspace-channels">
       {channels.map((channel) => <img src={channelSrc(channel)} alt={channel} width="16" height="16" />)}

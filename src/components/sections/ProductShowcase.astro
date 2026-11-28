@@ -11,7 +11,7 @@ interface Props {
 
 const { kind, detailsHref } = Astro.props;
 const commerce = kind === 'commerce';
-const title = commerce ? 'Easy Commerce' : 'Easy Inbox';
+const title = commerce ? 'BajuTech Commerce' : 'BajuTech Inbox';
 const target = commerce ? site.links.ecommerce : site.links.automation;
 const features = commerce ? [
   ['store', 'Storefront & catalog', 'Publish products and variants.'],
@@ -32,12 +32,12 @@ const features = commerce ? [
 ---
 <section class:list={["showcase", { "showcase-linked": detailsHref }]} data-showcase data-product-title={title} aria-label={title + ' preview with sample data'}>
 
-  <div class="portfolio-preview"><div class="portfolio-product-window" inert={Boolean(detailsHref)}>
+  <div class="portfolio-preview"><div class="portfolio-product-window" inert>
     <div class="portfolio-window-bar" aria-hidden="true"><i></i><i></i><i></i></div>
-    {commerce ? <CommerceDashboardPreview /> : <InboxConversationPreview autoplayOnly={Boolean(detailsHref)} />}
+    {commerce ? <CommerceDashboardPreview /> : <InboxConversationPreview autoplayOnly />}
   </div>
 
-    {detailsHref && <a class="preview-link" href={detailsHref} aria-label={'View details for ' + title}></a>}
+    <a class="preview-link" href={detailsHref ?? target} target={detailsHref ? undefined : '_blank'} rel={detailsHref ? undefined : 'noopener noreferrer'} aria-label={(detailsHref ? 'View details for ' : 'Open live site for ') + title}></a>
   </div>
 
   {!detailsHref && <details class="feature-list" open>
