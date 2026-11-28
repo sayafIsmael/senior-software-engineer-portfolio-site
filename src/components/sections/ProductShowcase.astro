@@ -53,7 +53,15 @@ const features = commerce ? [
     </details>}
   <footer class="showcase-footer">
     <div class="showcase-actions">
-      <a class="view-live" href={detailsHref ?? target} target={detailsHref ? undefined : "_blank"} rel={detailsHref ? undefined : "noopener noreferrer"} aria-label={(detailsHref ? "View details for " : "View live: ") + title}>{detailsHref ? "View details" : "View live"} <Icon name="arrow-up-right" size={15} /></a>
+      <a
+        class="view-live"
+        href={detailsHref ?? target}
+        target={detailsHref ? undefined : "_blank"}
+        rel={detailsHref ? undefined : "noopener noreferrer"}
+        aria-label={(detailsHref ? "View details for " : "View live: ") + title}
+      >
+        {detailsHref ? <><Icon name="eye" size={16} /> View details</> : <>View live <Icon name="arrow-up-right" size={15} /></>}
+      </a>
     </div>
   </footer>
 </section>
